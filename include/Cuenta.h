@@ -9,6 +9,7 @@ public:
     Cuenta();
     Cuenta(string username, string correo, string nombre, string passwd);
     string toString();
+    string toFile();
     virtual ~Cuenta();
 
 protected:

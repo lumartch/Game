@@ -1,10 +1,8 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-#include <iostream>
 #include "Cuenta.h"
-
-using namespace std;
+#include <fstream>
 
 class Nodo;
 
@@ -14,11 +12,15 @@ class Lista
         Lista();
         virtual ~Lista();
         void inserta(Cuenta cuenta);
-        void mostrarTodo();
+        //std::string mostrarTodo();
+        void guardarEnDisco();
+        int getCont();
+        Cuenta operator[](const int &pos);
     protected:
 
     private:
         Nodo* primero;
+        int cont;
 };
 
 class Nodo{

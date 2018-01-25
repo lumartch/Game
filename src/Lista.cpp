@@ -2,6 +2,7 @@
 
 Lista::Lista() {
     primero = nullptr;
+    cont = 0;
 }
 
 Lista::~Lista() {
@@ -12,14 +13,41 @@ void Lista::inserta(Cuenta c){
     Nodo* nuevoNodo = new Nodo(c);
     nuevoNodo->setSig(primero);
     primero = nuevoNodo;
+    cont++;
 }
 
-void Lista::mostrarTodo(){
+/*std::string Lista::mostrarTodo(){
     Nodo* aux = primero;
+    std::string toString;
     while(aux != nullptr){
-        cout << aux->getDato().toString() << endl;
+        toString += aux->getDato().toString() + "\n";
         aux = aux->getSig();
     }
+    return toString;
+}*/
+
+void Lista::guardarEnDisco(){
+    ofstream fout("Cuentas.txt");
+    Nodo* aux;
+    aux = primero;
+    for(int i = 0; i < cont; i++){
+        Cuenta c = aux->getDato();
+        fout << c.toString() << endl;
+        aux = aux->getSig();
+    }
+    fout.close();
+}
+
+int Lista::getCont(){
+    return cont;
+}
+
+Cuenta Lista::operator[](const int &pos){
+    Nodo* aux(primero);
+    for(int i = 0; i < pos; i++){
+        aux = aux->getSig();
+    }
+    return aux->getDato();
 }
 
 Nodo::Nodo() {

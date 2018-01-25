@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1516838569 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/main.cpp
+	<iostream>
+	"Cuenta.h"
+	"Lista.h"
+
+1516838311 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/include/Cuenta.h
+	<string>
+
+1516837701 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/include/Lista.h
+	"Cuenta.h"
+	<fstream>
+
+1516674330 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/src/Cuenta.cpp
+	"Cuenta.h"
+
+1516838475 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/src/Lista.cpp
+	"Lista.h"
+

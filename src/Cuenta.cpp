@@ -17,6 +17,12 @@ Cuenta::~Cuenta() {
 
 string Cuenta::toString(){
     string r = "";
+    r = nombre + " " + username + " " + correo;
+    return r;
+}
+
+string Cuenta::toFile(){
+    string r = "";
     r = nombre + "|" + username + "|" + correo;
     return r;
 }

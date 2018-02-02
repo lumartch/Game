@@ -1,20 +1,7 @@
 #include <iostream>
-#include "Cuenta.h"
-#include "Lista.h"
-
-using namespace std;
+#include "Menu.h"
 
 int main() {
-    Cuenta cl("Lumart","lumart@gmail.com","Luis","asd");
-
-    Lista listaCuentas;
-    listaCuentas.inserta(cl);
-    listaCuentas.inserta(cl);
-    listaCuentas.inserta(cl);
-    //cout << listaCuentas.mostrarTodo();
-    /*for(int i = 0; listaCuentas.getCont(); i++){
-        cout << listaCuentas[i].toString() << endl;
-    }*/
-    listaCuentas.guardarEnDisco();
+new Menu;
     return 0;
 }

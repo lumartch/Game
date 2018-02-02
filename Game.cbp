@@ -36,9 +36,11 @@
 		</Compiler>
 		<Unit filename="include/Cuenta.h" />
 		<Unit filename="include/Lista.h" />
+		<Unit filename="include/Menu.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Cuenta.cpp" />
 		<Unit filename="src/Lista.cpp" />
+		<Unit filename="src/Menu.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

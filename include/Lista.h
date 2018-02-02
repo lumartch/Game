@@ -3,6 +3,7 @@
 
 #include "Cuenta.h"
 #include <fstream>
+#include <iostream>
 
 class Nodo;
 
@@ -12,11 +13,13 @@ class Lista
         Lista();
         virtual ~Lista();
         void inserta(Cuenta cuenta);
-        //std::string mostrarTodo();
+        bool cuentaCorroborada(std::string &username, std::string &password);
+        int busqueda(std::string &username);
+        void eliminarDato(std::string &username);
         void guardarEnDisco();
         int getCont();
-        Cuenta operator[](const int &pos);
-    protected:
+        void cargarDesdeDisco(std::string nombreArchivo);
+        Cuenta& operator[](const int &pos);
 
     private:
         Nodo* primero;
@@ -30,12 +33,11 @@ class Nodo{
         virtual ~Nodo();
         void setSig(Nodo* siguiente);
         Nodo* getSig();
-        Cuenta getDato();
+        Cuenta& getDato();
         void setDato(Cuenta c);
     private:
         Nodo* siguiente;
         Cuenta dato;
-
 };
 
 

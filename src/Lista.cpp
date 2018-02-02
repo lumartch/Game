@@ -3,10 +3,16 @@
 Lista::Lista() {
     primero = nullptr;
     cont = 0;
+    cargarDesdeDisco("Cuentas.txt");
 }
 
 Lista::~Lista() {
-    //dtor
+    Nodo* aux;
+    while(primero != nullptr){
+        aux = primero;
+        primero = primero->getSig();
+        delete aux;
+    }
 }
 
 void Lista::inserta(Cuenta c){
@@ -16,15 +22,16 @@ void Lista::inserta(Cuenta c){
     cont++;
 }
 
-/*std::string Lista::mostrarTodo(){
-    Nodo* aux = primero;
-    std::string toString;
-    while(aux != nullptr){
-        toString += aux->getDato().toString() + "\n";
+bool Lista::cuentaCorroborada(std::string &username, std::string &password){
+    Nodo* aux(primero);
+    for(int i = 0; i < getCont(); i++){
+        if(aux->getDato().getUserName() == username and aux->getDato().getPasswd() == password){
+            return true;
+        }
         aux = aux->getSig();
     }
-    return toString;
-}*/
+    return false;
+}
 
 void Lista::guardarEnDisco(){
     ofstream fout("Cuentas.txt");
@@ -32,22 +39,68 @@ void Lista::guardarEnDisco(){
     aux = primero;
     for(int i = 0; i < cont; i++){
         Cuenta c = aux->getDato();
-        fout << c.toString() << endl;
+        fout << c.toFile() << endl;
         aux = aux->getSig();
     }
     fout.close();
+}
+
+int Lista::busqueda(std::string &username){
+    int i;
+    Nodo* aux(primero);
+    for(i = 0; i < getCont(); i++){
+        if(aux->getDato().getUserName() == username){
+            return i;
+        }
+        aux = aux->getSig();
+    }
+    return -1;
+}
+
+void Lista::eliminarDato(std::string &username){
+    int pos = busqueda(username);
+    if(pos == -1){
+        return;
+    }
+    Nodo* aux(primero);
+    Nodo* nodoEl;
+    int i = 0;
+    while(i != pos - 1){
+        aux = aux->getSig();
+        i++;
+    }
+    nodoEl = aux->getSig();
+    aux->setSig(nodoEl->getSig());
+    cont--;
+    delete nodoEl;
 }
 
 int Lista::getCont(){
     return cont;
 }
 
-Cuenta Lista::operator[](const int &pos){
+Cuenta& Lista::operator[](const int &pos){
     Nodo* aux(primero);
     for(int i = 0; i < pos; i++){
         aux = aux->getSig();
     }
     return aux->getDato();
+}
+
+void Lista::cargarDesdeDisco(std::string nombreArchivo){
+    ifstream fin(nombreArchivo);
+    if(!fin.good()){
+        ofstream fout(nombreArchivo);
+        return;
+    }
+    std::string stringObj;
+    fin >> stringObj;
+    while (!fin.eof()){
+        Cuenta obj(stringObj);
+        inserta(obj);
+        fin >> stringObj;
+    }
+    fin.close();
 }
 
 Nodo::Nodo() {
@@ -71,7 +124,7 @@ Nodo* Nodo::getSig(){
     return siguiente;
 }
 
-Cuenta Nodo::getDato(){
+Cuenta& Nodo::getDato(){
     return dato;
 }
 

@@ -84,26 +84,3 @@ string Cuenta::toFile(){
     return r;
 }
 
-/*bool Cuenta::operator ==(const Cuenta& cuenta){
-    return username == cuenta.username;
-}
-
-bool Cuenta::operator !=(const Cuenta& cuenta){
-    return username != cuenta.username;
-}
-
-bool Cuenta::operator <(const Cuenta& cuenta){
-    return username < cuenta.username;
-}
-
-bool Cuenta::operator <=(const Cuenta& cuenta){
-    return username <= cuenta.username;
-}
-
-bool Cuenta::operator >=(const Cuenta& cuenta){
-    return username >= cuenta.username;
-}
-
-bool Cuenta::operator >(const Cuenta& cuenta){
-    return username > cuenta.username;
-}*/

@@ -1,55 +1,27 @@
 # depslib dependency file v1.0
-1517433098 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/main.cpp
-	<iostream>
-	"Menu.h"
-
-1517436485 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/include/Cuenta.h
-	<string>
-
-1517443906 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/include/Lista.h
-	"Cuenta.h"
-	<fstream>
-	<iostream>
-
-1517436753 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/src/Cuenta.cpp
-	"Cuenta.h"
-
-1517442775 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/src/Lista.cpp
-	"Lista.h"
-
-1517441129 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/include/Menu.h
-	<iostream>
-	"Lista.h"
-	"Cuenta.h"
-	<regex>
-
-1517442315 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/src/Menu.cpp
-	"Menu.h"
-
 1517458842 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\main.cpp
 	<iostream>
 	"Menu.h"
 
-1517458886 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\include\menu.h
+1517615746 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\include\menu.h
 	<iostream>
 	"Lista.h"
 	"Cuenta.h"
 	<regex>
 
-1517458884 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\include\lista.h
+1517615747 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\include\lista.h
 	"Cuenta.h"
 	<fstream>
-	<iostream>
 
-1517458883 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\include\cuenta.h
+1517615746 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\include\cuenta.h
 	<string>
 
-1517458889 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\src\cuenta.cpp
+1517615748 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\src\cuenta.cpp
 	"Cuenta.h"
 
-1517458891 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\src\lista.cpp
+1517615749 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\src\lista.cpp
 	"Lista.h"
 
-1517458891 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\src\menu.cpp
+1517615749 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\src\menu.cpp
 	"Menu.h"
 

@@ -21,12 +21,6 @@ public:
     string toString();
     string toFile();
     virtual ~Cuenta();
-    /*bool operator ==(const Cuenta& cuenta);
-    bool operator !=(const Cuenta& cuenta);
-    bool operator <(const Cuenta& cuenta);
-    bool operator <=(const Cuenta& Cuenta);
-    bool operator >=(const Cuenta& Cuenta);
-    bool operator >(const Cuenta& Cuenta);*/
 
 private:
     string username;

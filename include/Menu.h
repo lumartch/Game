@@ -9,28 +9,26 @@
 
 using namespace std;
 
-class Menu
-{
-    public:
-        Menu();
-        virtual ~Menu();
-        void menuPrincipal();
-        void acceder();
-        void agregar();
-        void eliminar(const int &pos);
-        //void modificar();
-        void modificarMenu(const int &pos);
-        void mostrar(const int &pos);
-        void mostrarTodo();
-        void salir();
-        void pausa();
+class Menu {
+public:
+    Menu();
+    virtual ~Menu();
+    void menuPrincipal();
+    void acceder();
+    void agregar();
+    void eliminar(const int &pos);
+    void modificarMenu(const int &pos);
+    void mostrar(const int &pos);
+    void mostrarTodo();
+    void salir();
+    void pausa();
 
-    private:
-        Lista listaCuentas;
-        bool correoValido(std::string &correo);
-        bool usernameValido(std::string &username);
-        bool nombreValido(std::string &nombre);
-        bool passwdValido(std::string &password);
+private:
+    Lista listaCuentas;
+    bool correoValido(std::string &correo);
+    bool usernameValido(std::string &username);
+    bool nombreValido(std::string &nombre);
+    bool passwdValido(std::string &password);
 };
 
 #endif // MENU_H

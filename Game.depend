@@ -3,6 +3,8 @@
 	<iostream>
 	"Menu.h"
 
+1517615748 
+
 1517615746 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\include\menu.h
 	<iostream>
 	"Lista.h"
@@ -24,4 +26,96 @@
 
 1517615749 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\src\menu.cpp
 	"Menu.h"
+
+1517458842 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/main.cpp
+	<iostream>
+	"Menu.h"
+
+1517617176 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Menu.h
+	<iostream>
+	"Lista.h"
+	"Cuenta.h"
+	<regex>
+
+1517615747 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Lista.h
+	"Cuenta.h"
+	<fstream>
+
+1518650179 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Cuenta.h
+	<string>
+
+1518059428 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Inventario.cpp
+	"Inventario.h"
+
+1518059419 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Inventario.h
+
+1518650189 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Cuenta.cpp
+	"Cuenta.h"
+
+1518059424 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Menu.cpp
+	"Menu.h"
+
+1518649876 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/MenuPersonajes.cpp
+	"MenuPersonajes.h"
+
+1518649875 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/MenuPersonajes.h
+
+1518059425 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Personaje.cpp
+	"Personaje.h"
+
+1518059421 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Personaje.h
+
+1518919016 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\menu.h
+	<iostream>
+	<regex>
+	"Lista.h"
+	"Cuenta.h"
+	"Personaje.h"
+	"MenuPersonajes.h"
+
+1518659844 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\lista.h
+	"Cuenta.h"
+	<fstream>
+
+1518861503 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\cuenta.h
+	<string>
+	"Personaje.h"
+
+1518861514 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\cuenta.cpp
+	"Cuenta.h"
+
+1518659848 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\inventario.cpp
+	"Inventario.h"
+
+1518659837 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\inventario.h
+
+1518659841 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\lista.cpp
+	"Lista.h"
+
+1518924358 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\menu.cpp
+	"Menu.h"
+
+1518922604 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\menupersonajes.cpp
+	"MenuPersonajes.h"
+
+1518924232 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\menupersonajes.h
+	"Personaje.h"
+	<iostream>
+	<regex>
+	<fstream>
+
+1518919089 source:c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\personaje.cpp
+	"Personaje.h"
+
+1518900549 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\personaje.h
+	<string>
+	<cstring>
+	"Inventario.h"
+
+1518859407 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\\personaje.h
+	<string>
+	<cstring>
+	"Inventario.h"
+
+1518659837 c:\users\lumar\onedrive\cucei\seminario de estructura de datos ii\proyecto\game\\inventario.h
 

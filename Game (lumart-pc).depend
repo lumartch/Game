@@ -132,12 +132,12 @@
 	<string>
 	"Personaje.h"
 
-1519086483 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Personaje.h
-	<string>
-	<cstring>
-	"Inventario.h"
+1519255842 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Personaje.h
+	"ListaInventario.h"
+	"ListaHistorial.h"
 
-1518659837 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Inventario.h
+1519249576 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Inventario.h
+	<string>
 
 1518659848 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Inventario.cpp
 	"Inventario.h"
@@ -153,7 +153,7 @@
 	<iostream>
 	"Menu.h"
 
-1519086187 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Menu.h
+1519090188 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Menu.h
 	<iostream>
 	<fstream>
 	<regex>
@@ -162,18 +162,45 @@
 	"Personaje.h"
 	"MenuPersonajes.h"
 
-1518924232 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/MenuPersonajes.h
+1519251977 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/MenuPersonajes.h
 	"Personaje.h"
+	"Historial.h"
 	<iostream>
 	<regex>
 	<fstream>
 
-1519086202 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Menu.cpp
+1519256711 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Menu.cpp
 	"Menu.h"
 
-1519084183 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/MenuPersonajes.cpp
+1519256834 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/MenuPersonajes.cpp
 	"MenuPersonajes.h"
 
-1518919089 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Personaje.cpp
+1519256812 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Personaje.cpp
 	"Personaje.h"
+
+1519250626 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/ListaInventario.cpp
+	"ListaInventario.h"
+
+1519249643 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/ListaInventario.h
+	"Objeto.h"
+
+1519250121 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Objeto.h
+	<string>
+	<cstring>
+
+1519250134 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Objeto.cpp
+	"Objeto.h"
+
+1519251948 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Historial.cpp
+	"Historial.h"
+
+1519251831 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/Historial.h
+	<string>
+	<cstring>
+
+1519252552 /home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/ListaHistorial.h
+	"Historial.h"
+
+1519252552 source:/home/lumartch/Documentos/CUCEI/Seminario de Estructura de datos II/Proyecto/Game/ListaHistorial.cpp
+	"ListaHistorial.h"
 

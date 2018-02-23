@@ -9,7 +9,9 @@ Personaje::Personaje() {
     strcpy(arma, "N/A");
     strcpy(equipo, "N/A");
     experiencia = 0;
-    historial = "N/A";
+    for(int i = 0; i < 3; i++){
+        misiones[i] = false;
+    }
 }
 
 Personaje::~Personaje() {
@@ -19,12 +21,12 @@ void Personaje::setNombre(const std::string& nombre) {
     strcpy(this->nombre, nombre.c_str());
 }
 
-void Personaje::setGenero(const std::string& gen) {
-    strcpy(genero, gen.c_str());
+void Personaje::setGenero(const std::string& genero) {
+    strcpy(this->genero, genero.c_str());
 }
 
-void Personaje::setRol(const std::string& r) {
-    strcpy(rol, r.c_str());
+void Personaje::setRol(const std::string& rol) {
+    strcpy(this->rol, rol.c_str());
 }
 
 void Personaje::setRaza(const std::string& raza) {
@@ -39,12 +41,8 @@ void Personaje::setEquipo(const std::string& equipo) {
     strcpy(this->equipo, equipo.c_str());
 }
 
-void Personaje::setExperiencia(const long int& exp) {
-    experiencia = exp;
-}
-
-void Personaje::setHistorial(const std::string& historial) {
-    this->historial = historial;
+void Personaje::setExperiencia(const long int& experiencia) {
+    this->experiencia += experiencia;
 }
 
 char* Personaje::getNombre() {
@@ -75,10 +73,6 @@ long int Personaje::getExperiencia() {
     return experiencia;
 }
 
-std::string Personaje::getHistorial() {
-    return historial;
-}
-
 std::string Personaje::toString() {
     std::string res = "Nombre: " + std::string(nombre) +
                       "\nGenero: " + std::string(genero) +
@@ -86,8 +80,7 @@ std::string Personaje::toString() {
                       "\nRaza: " + std::string(raza) +
                       "\nArma: " + std::string(arma) +
                       "\nEquipo: " + std::string(equipo) +
-                      "\nExperiencia: " + std::to_string(experiencia) +
-                      "\nHistorial: " + historial;
+                      "\nExperiencia: " + std::to_string(experiencia);
     return res;
 }
 
@@ -98,3 +91,29 @@ void Personaje::setUsernameOwner(const std::string& usernameOwner) {
 char* Personaje::getUsernameOwner() {
     return usernameOwner;
 }
+
+void Personaje::setMision(const int& pos) {
+    /*if(pos == 1){
+        misiones[0] = true;
+    }
+    else if(pos == 2){
+        misiones[1] = true;
+    }
+    else{
+        misiones[2] = true;
+    }*/
+    misiones[pos] = true;
+}
+
+bool* Personaje::getMisiones() {
+    return misiones;
+}
+
+
+/*ListaInventario& Personaje::getListaInventario() {
+    return listaInventario;
+}
+
+ListaHistorial& Personaje::getListaHistorial() {
+    return listaHistorial;
+}*/

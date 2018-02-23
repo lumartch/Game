@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include <iostream>
+#include <fstream>
 #include <regex>
 #include "Lista.h"
 #include "Cuenta.h"
@@ -38,7 +39,7 @@ private:
     bool existePersonaje(std::string &personaje);
     bool existePersonajeCuenta(std::string &nomPersonaje, std::string &username);
     bool validoOpcMod(std::string &opc);
-    void guardarPersonaje(const std::string&archivo, Personaje &pers);
+    void guardarPersonaje(const std::string&archivo, Personaje pers);
     bool validoDato(std::string &dato);
     Personaje regresaPersonaje(std::string &nomPersonaje, std::string &username);
     bool validoOpcRazaRol(std::string &opc);

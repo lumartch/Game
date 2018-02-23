@@ -55,7 +55,7 @@ void Menu::acceder() {
     string opc;
     do {
         system("clear");
-        cout << "***Menu Acceder***" << endl;
+        cout << "***Menu para el usuario " << listaCuentas[pos].getUserName() << "***" << endl << endl;
         cout << "1) Mostrar Cuenta." << endl;
         cout << "2) Modificar Cuenta." << endl;
         cout << "3) Eliminar Cuenta." << endl;
@@ -231,7 +231,7 @@ void Menu::crearPersonaje(const int &pos) {
     system("clear");
     cout << "*** Crear personaje ***" << endl << endl;
     string usnm = listaCuentas[pos].getUserName();
-    if(!maxPersonajes(usnm)) {
+    if(maxPersonajes(usnm)) {
         cout << "Esta cuenta ya cuenta con el maximo de personajes a ingresar. \n"
              "No puede ingresar mas personajes." << endl;
         return;
@@ -385,23 +385,33 @@ void Menu::eliminarPersonaje(const int &pos) {
     cout << "Ingrese el nombre del personaje a eliminar: ";
     getline(cin, auxStr);
     if(existePersonajeCuenta(auxStr, auxUser)) {
-        ifstream file("Archivo_Personajes.bin");
-        if(file.good()) {
-            Personaje pers;
-            while(!file.eof()) {
-                file.read((char*)&pers, sizeof(pers));
-                if(file.eof()) {
-                    break;
-                }
-                string auxNom = pers.getNombre();
-                if(auxNom != auxStr) {
-                    guardarPersonaje("Temporal.bin", pers);
+        string opc;
+        do{
+            cout << endl << "Seguro que desea eliminar a este personaje? (S/N): ";
+            getline(cin, opc);
+        }while(opc != "S" and opc != "s" and opc != "N" and opc != "n");
+        if(opc == "S" or opc == "s"){
+            ifstream file("Archivo_Personajes.bin");
+            if(file.good()) {
+                Personaje pers;
+                while(!file.eof()) {
+                    file.read((char*)&pers, sizeof(pers));
+                    if(file.eof()) {
+                        break;
+                    }
+                    string auxNom = pers.getNombre();
+                    if(auxNom != auxStr) {
+                        guardarPersonaje("Temporal.bin", pers);
+                    }
                 }
             }
+            file.close();
+            remove("Archivo_Personajes.bin");
+            rename("Temporal.bin", "Archivo_Personajes.bin");
         }
-        file.close();
-        remove("Archivo_Personajes.bin");
-        rename("Temporal.bin", "Archivo_Personajes.bin");
+        else{
+            cout << endl << "Personaje conservado!" << endl;
+        }
     } else {
         cout << endl << "No existe el personaje que desea eliminar. Intente de nuevo." << endl;
     }
@@ -412,6 +422,13 @@ void Menu::accederPersonaje(const int &pos) {
     string auxStr;
     string auxUser = listaCuentas[pos].getUserName();
     cout << "*** Acceder a personaje ***" << endl << endl;
+    ifstream file("Archivo_Personajes.bin");
+    if(!file.good()){
+        cout << endl << "No existe el archivo de personajes. Intente de nuevo." << endl;
+        file.close();
+        return;
+    }
+    file.close();
     cout << "Ingrese el nombre del personaje a acceder: ";
     getline(cin, auxStr);
     if(existePersonajeCuenta(auxStr, auxUser)) {
@@ -474,10 +491,12 @@ bool Menu::existePersonaje(std::string& nomPersonaje) {
             }
             string auxNom = pers.getNombre();
             if(auxNom == nomPersonaje) {
+                file.close();
                 return true;
             }
         }
     }
+    file.close();
     return false;
 }
 
@@ -493,10 +512,12 @@ bool Menu::existePersonajeCuenta(std::string& nomPersonaje, std::string& usernam
             string auxNom = pers.getNombre();
             string auxUser = pers.getUsernameOwner();
             if(auxNom == nomPersonaje and auxUser == username) {
+                file.close();
                 return true;
             }
         }
     }
+    file.close();
     return false;
 }
 
@@ -509,7 +530,7 @@ bool Menu::validoOpcMod(std::string& opc) {
     return false;
 }
 
-void Menu::guardarPersonaje(const std::string& archivo, Personaje &pers) {
+void Menu::guardarPersonaje(const std::string& archivo, Personaje pers) {
     ofstream file(archivo, ios::binary|ios::app);
     file.write((char*)&pers, sizeof(pers));
     file.close();
@@ -535,10 +556,12 @@ Personaje Menu::regresaPersonaje(std::string& nomPersonaje, std::string &usernam
             string auxNom = pers.getNombre();
             string auxUserOwner = pers.getUsernameOwner();
             if(auxNom == nomPersonaje and auxUserOwner == username) {
+                file.close();
                 return pers;
             }
         }
     }
+    file.close();
     return pers;
 }
 
@@ -559,17 +582,16 @@ bool Menu::maxPersonajes(std::string& username) {
     if(file.good()) {
         while(!file.eof()) {
             file.read((char*)&pers, sizeof(pers));
-            if(file.eof()) {
-                break;
-            }
+            if(file.eof()) {break;}
             string auxPers = pers.getUsernameOwner();
             if(auxPers == username) {
                 i++;
             }
         }
     }
+    file.close();
     if(i == 3) {
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }

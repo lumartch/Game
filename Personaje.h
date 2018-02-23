@@ -1,9 +1,8 @@
 #ifndef PERSONAJE_H
 #define PERSONAJE_H
 
-#include <string>
-#include <cstring>
-#include "Inventario.h"
+#include "ListaInventario.h"
+#include "ListaHistorial.h"
 
 class Personaje {
 public:
@@ -16,7 +15,6 @@ public:
     void setArma(const std::string &arma);
     void setEquipo(const std::string &equipo);
     void setExperiencia(const long int &exp);
-    void setHistorial(const std::string &historial);
     char* getUsernameOwner();
     char* getNombre();
     char* getGenero();
@@ -25,7 +23,10 @@ public:
     char* getArma();
     char* getEquipo();
     long int getExperiencia();
-    std::string getHistorial();
+    void setMision(const int &pos);
+    bool* getMisiones();
+    //ListaInventario& getListaInventario();
+    //ListaHistorial& getListaHistorial();
     std::string toString();
     virtual ~Personaje();
 
@@ -37,9 +38,11 @@ private:
     char raza[30];
     char arma[30];
     char equipo[30];
-    Inventario inventario;
+    //ListaInventario listaInventario;
     long int experiencia;
-    std::string historial;
+    bool misiones[3];
+    //ListaHistorial listaHistorial;
+    //std::string historial;
 };
 
 #endif // PERSONAJE_H

@@ -197,20 +197,82 @@ void MenuPersonajes::mostrar() {
 }
 
 void MenuPersonajes::completarMision() {
+    system("clear");
+    string opc;
+    cout << "*** Completar mision ***" << endl << endl;
+    cout << "1) Tutorial." << endl;
+    cout << "2) Entrenamiento mano a mano." << endl;
+    cout << "3) Primer enfrentamiento." << endl;
+    do{
+        cout << "Elije una opcion: ";
+        getline(cin, opc);
+    }while(opc != "1" and opc!= "2" and opc != "3");
+    if(opc == "1"){
+        if(personaje.getMisiones()[0]){
+            cout <<  "Mision ya hecha." << endl;
+        }
+        else{
+            personaje.setExperiencia(100);
+            personaje.setMision(0);
+        }
+    }
+    else if(opc == "2"){
 
+        if(personaje.getMisiones()[1]){
+            cout <<  "Mision ya hecha." << endl;
+        }
+        else{
+            personaje.setExperiencia(200);
+            personaje.setMision(1);
+        }
+    }
+    else{
+
+        if(personaje.getMisiones()[2]){
+            cout <<  "Mision ya hecha." << endl;
+        }
+        else{
+            personaje.setExperiencia(300);
+            personaje.setMision(2);
+        }
+    }
+    /*if(opc == "1"){
+        his.setTitulo("Tutorial");
+        his.setDescripcion("El usuario ha completado el tutorial.");
+        his.setExperiencia(100);
+    }
+    else if(opc == "2"){
+        his.setTitulo("Entrenamiento mano a mano");
+        his.setDescripcion("El usuario ha completado el entrenamiento mano a mano.");
+        his.setExperiencia(200);
+    }
+    else{
+        his.setTitulo("Primer enfrentamiento");
+        his.setDescripcion("El usuario ha completado el primer enfrentamiento.");
+        his.setExperiencia(300);
+    }
+    if(personaje.getListaHistorial().existeHistorial(his) == false){
+        personaje.getListaHistorial().insertar(personaje.getListaHistorial().ultimaPos(), his);
+        personaje.setExperiencia(his.getExperiencia());
+    }
+    else{
+        cout << endl << "El personaje ya ha completado esta mision." << endl;
+    }*/
 }
 
 void MenuPersonajes::abandonar() {
     string auxStr = personaje.getNombre();
     ifstream file("Archivo_Personajes.bin");
     Personaje pers;
-    while(!file.eof()){
+    while(!file.eof()) {
         file.read((char*)&pers, sizeof(pers));
-        if(file.eof()){break;}
+        if(file.eof()) {
+            break;
+        }
         string auxNomPers = pers.getNombre();
-        if(auxNomPers != auxStr){
+        if(auxNomPers != auxStr) {
             guardarPersonaje("Temporal.bin", pers);
-        } else{
+        } else {
             guardarPersonaje("Temporal.bin", personaje);
         }
     }
@@ -253,8 +315,7 @@ bool MenuPersonajes::validoOpcRazaRol(std::string& opc) {
     return false;
 }
 
-void MenuPersonajes::guardarPersonaje(const std::string& archivo, Personaje& pers)
-{
+void MenuPersonajes::guardarPersonaje(const std::string& archivo, Personaje& pers) {
     ofstream file(archivo, ios::binary|ios::app);
     file.write((char*)&pers, sizeof(pers));
     file.close();

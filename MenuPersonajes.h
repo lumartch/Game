@@ -2,6 +2,7 @@
 #define MENUPERSONAJES_H
 
 #include "Personaje.h"
+#include "Historial.h"
 #include <iostream>
 #include <regex>
 #include <fstream>

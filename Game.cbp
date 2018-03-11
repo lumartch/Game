@@ -36,8 +36,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Arma.cpp" />
+		<Unit filename="Arma.h" />
 		<Unit filename="Cuenta.cpp" />
 		<Unit filename="Cuenta.h" />
+		<Unit filename="Grafo.cpp" />
+		<Unit filename="Grafo.h" />
 		<Unit filename="Historial.cpp" />
 		<Unit filename="Historial.h" />
 		<Unit filename="Lista.cpp" />
@@ -50,8 +54,6 @@
 		<Unit filename="Menu.h" />
 		<Unit filename="MenuPersonajes.cpp" />
 		<Unit filename="MenuPersonajes.h" />
-		<Unit filename="Objeto.cpp" />
-		<Unit filename="Objeto.h" />
 		<Unit filename="Personaje.cpp" />
 		<Unit filename="Personaje.h" />
 		<Unit filename="main.cpp" />

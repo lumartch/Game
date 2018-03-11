@@ -12,17 +12,17 @@ bool ListaInventario::estaLlena() {
     return ultimo == 49;
 }
 
-void ListaInventario::insertar(const int& pos, const Objeto& inv) {
+void ListaInventario::insertar(const int& pos, const Arma& arma) {
     if(estaLlena() or pos <-1 or pos > ultimo) {
         //std::cout << "Desbordamiento de datos.";
         return;
     }
     int i = ultimo;
-    while(i > pos){
+    while(i > pos) {
         inventario[i + 1] = inventario[i];
         i--;
     }
-    inventario[pos + 1] = inv;
+    inventario[pos + 1] = arma;
     ultimo++;
 }
 
@@ -70,19 +70,19 @@ int ListaInventario::encontrar(const int& pos) {
     return -1;
 }
 
-Objeto& ListaInventario::operator[](const int& pos) {
-    if(estaVacia() or pos < 1 or pos > ultimo){
+Arma& ListaInventario::operator[](const int& pos) {
+    if(estaVacia() or pos < 1 or pos > ultimo) {
         return inventario[-1];
     }
     return inventario[pos];
 }
 
 std::string ListaInventario::toString() {
-    if(estaVacia()){
+    if(estaVacia()) {
         return "El inventario se encuentra vacio.\n";
     }
     std::string res;
-    for(int i = 0; i <= ultimo; i++){
+    for(int i = 0; i <= ultimo; i++) {
         res += std::to_string(i+1) + ") " + inventario[i].toString()  +  "\n";
     }
     return res;
@@ -91,6 +91,40 @@ std::string ListaInventario::toString() {
 void ListaInventario::borrarTodo() {
     ultimo = -1;
 }
+
+void ListaInventario::leerDelDisco(const std::string &archivo) {
+    std::ifstream file(archivo);
+    std::string auxStr;
+    Arma arma;
+    if(file.good()){
+        while(!file.eof()){
+            getline(file, auxStr, '|');
+            arma.setNombre(auxStr);
+            getline(file, auxStr, '|');
+            arma.setDescripcion(auxStr);
+            getline(file, auxStr, '|');
+            arma.setAtaque(atoi(auxStr.c_str()));
+            getline(file, auxStr, '\n');
+            arma.setPrecio(atoi(auxStr.c_str()));
+            if(file.eof()){break;}
+            insertar(ultimaPos(), arma);
+        }
+    }
+    else{
+        std::ofstream fout(archivo);
+        fout.close();
+    }
+    file.close();
+}
+
+void ListaInventario::escribirAlDisco(const std::string &archivo) {
+    std::ofstream file(archivo);
+    for(int i = 0; i < ultimo; i++){
+        file << inventario[i].toFile();
+    }
+    file.close();
+}
+
 
 ListaInventario::~ListaInventario() {
     //dtor

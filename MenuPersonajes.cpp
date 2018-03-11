@@ -4,22 +4,29 @@ MenuPersonajes::MenuPersonajes() {
     menuPrincipal();
 }
 
-MenuPersonajes::MenuPersonajes(Personaje& pers) {
+MenuPersonajes::MenuPersonajes(Personaje& pers, Grafo & graf) {
     personaje = pers;
+    grafoGeneral = graf;
+    //Lee del directorio el inventario
+    listaInventario.leerDelDisco(DIR + string(personaje.getNombre()) + SLASH + string(personaje.getNombre()) + "_Inventario.txt");
+
+    //Lee el grafo del Personaje
+    grafoPersonaje.cargar(DIR + string(personaje.getNombre()) + SLASH + string(personaje.getNombre()) + "_Vertices.txt", DIR + string(personaje.getNombre()) + SLASH + string(personaje.getNombre()) + "_Aristas.txt");
     menuPrincipal();
 }
 
 void MenuPersonajes::menuPrincipal() {
     string opc;
     do {
-        system("clear");
+        system(CLEAR);
         cout << "*** Opciones para el personaje " << personaje.getNombre() << " ***" << endl << endl;
         cout << "1) Modificar atributos." << endl;
         cout << "2) Mostrar." << endl;
         cout << "3) Completar mision." << endl;
-        cout << "4) Abandonar." << endl;
+        cout << "4) Ver mapa." << endl;
+        cout << "0) Abandonar." << endl;
         do {
-            cout << "Elije una opcion: ";
+            cout << ">> ";
             getline(cin, opc);
         } while(!validoOpcMenu(opc));
         if(opc == "1") {
@@ -28,130 +35,39 @@ void MenuPersonajes::menuPrincipal() {
             mostrar();
         } else if(opc == "3") {
             completarMision();
-        } else {
+        } else if(opc == "4"){
+            mostrarMapa();
+        }
+        else{
             abandonar();
         }
-        if(opc != "4") {
+        if(opc != "0") {
             pausa();
         }
-    } while(opc != "4");
+    } while(opc != "0");
 }
 
 void MenuPersonajes::modificar() {
-    system("clear");
+    system(CLEAR);
     string opc;
     cout << "*** Modificar atributos del personaje ***" << endl << endl;
-    cout << "1) Genero." << endl;
-    cout << "2) Rol." << endl;
-    cout << "3) Raza." << endl;
-    cout << "4) Arma." << endl;
-    cout << "5) Equipo." << endl;
-    cout << "6) Regresar al menu de personaje...." << endl;
+    cout << "1) Arma." << endl;
+    cout << "2) Equipo." << endl;
+    cout << "0) Regresar al menu de personaje...." << endl;
     do {
         cout << "Elije una opcion: ";
         getline(cin, opc);
     } while(!validoOpcModificar(opc));
     if(opc == "1") {
-        string auxStr;
-        cout << endl << endl;
-        cout << "Genero: " << endl;
-        cout << "1) Hombre." << endl;
-        cout << "2) Mujer." << endl;
-        cout << "Elije una opcion: ";
-        do {
-            getline(cin, auxStr);
-            if(auxStr != "1" and auxStr != "2") {
-                cout << endl << "Opcion invalida. Intente de nuevo." << endl;
-            }
-        } while(auxStr != "1" and auxStr != "2");
-        if(auxStr == "1") {
-            personaje.setGenero("Hombre");
-        } else {
-            personaje.setGenero("Mujer");
-        }
+        cout << listaInventario.toString();
+        //string auxStr;
+        //cout << "Ingrese el arma: ";
+        //getline(cin, auxStr);
+        //personaje.setArma(auxStr);
     } else if(opc == "2") {
         string auxStr;
         do {
-            system("clear");
-            cout << "*** Modificar atributos del personaje ***" << endl << endl;
-            cout << "Rol: " << endl;
-            cout << "1) Clerigo." << endl;
-            cout << "2) Luchador." << endl;
-            cout << "3) Paladin." << endl;
-            cout << "4) Explorador." << endl;
-            cout << "5) Picaro." << endl;
-            cout << "6) Chaman." << endl;
-            cout << "7) Señor de la guerra." << endl;
-            cout << "8) Mago." << endl;
-            cout << "Elije una opcion: ";
-            getline(cin, auxStr);
-            if(!validoOpcRazaRol(auxStr)) {
-                cout << endl << "Opcion invalida. Intente de nuevo." << endl;
-            }
-        } while(!validoOpcRazaRol(auxStr));
-        if(auxStr == "1") {
-            personaje.setRol("Clerigo");
-        } else if(auxStr == "2") {
-            personaje.setRol("Luchador");
-        } else if(auxStr == "3") {
-            personaje.setRol("Paladin");
-        } else if(auxStr == "4") {
-            personaje.setRol("Explorador");
-        } else if(auxStr == "5") {
-            personaje.setRol("Picaro");
-        } else if(auxStr == "6") {
-            personaje.setRol("Chaman");
-        } else if(auxStr == "7") {
-            personaje.setRol("Señor de la guerra");
-        } else {
-            personaje.setRol("Mago");
-        }
-    } else if(opc == "3") {
-        string auxStr;
-        do {
-            system("clear");
-            cout << "*** Modificar atributos del personaje ***" << endl << endl;
-            cout << "Raza: " << endl;
-            cout << "1) Dragonborn." << endl;
-            cout << "2) Enano." << endl;
-            cout << "3) Eladrin." << endl;
-            cout << "4) Elfo." << endl;
-            cout << "5) Mitad elfo." << endl;
-            cout << "6) Humano." << endl;
-            cout << "7) Halflings." << endl;
-            cout << "8) Tieflings." << endl;
-            cout << "Elije una opcion: ";
-            getline(cin, auxStr);
-            if(!validoOpcRazaRol(auxStr)) {
-                cout << endl << "Opcion invalida. Intente de nuevo." << endl;
-            }
-        } while(!validoOpcRazaRol(auxStr));
-        if(auxStr == "1") {
-            personaje.setRaza("Dragonborn");
-        } else if(auxStr == "2") {
-            personaje.setRaza("Enano");
-        } else if(auxStr == "3") {
-            personaje.setRaza("Eladrin");
-        } else if(auxStr == "4") {
-            personaje.setRaza("Elfo");
-        } else if(auxStr == "5") {
-            personaje.setRaza("Mitad elfo");
-        } else if(auxStr == "6") {
-            personaje.setRaza("Humano");
-        } else if(auxStr == "7") {
-            personaje.setRaza("Halflings");
-        } else {
-            personaje.setRaza("Tieflings");
-        }
-    } else if(opc == "4") {
-        string auxStr;
-        cout << "Ingrese el arma: ";
-        getline(cin, auxStr);
-        personaje.setArma(auxStr);
-    } else if(opc == "5") {
-        string auxStr;
-        do {
-            system("clear");
+            system(CLEAR);
             cout << "*** Modificar atributos del personaje ***" << endl << endl;
             cout << "Equipo: " << endl;
             cout << "1) Renegado." << endl;
@@ -160,9 +76,9 @@ void MenuPersonajes::modificar() {
             cout << "4) Guarda Gris." << endl;
             cout << "5) Qun." << endl;
             cout << "6) Berseker." << endl;
-            cout << "8) Nazgul." << endl;
-            cout << "7) Cuervo." << endl;
-            cout << "Elije una opcion: ";
+            cout << "7) Nazgul." << endl;
+            cout << "8) Cuervo." << endl;
+            cout << ">> ";
             getline(cin, auxStr);
             if(!validoOpcRazaRol(auxStr)) {
                 cout << endl << "Opcion invalida. Intente de nuevo." << endl;
@@ -191,76 +107,125 @@ void MenuPersonajes::modificar() {
 }
 
 void MenuPersonajes::mostrar() {
-    system("clear");
+    system(CLEAR);
     cout << "*** Mostrar atributos del personaje ***" << endl << endl;
-    cout << personaje.toString() << endl;
+    cout << "+-----------------+-----------------+-----------------+\n";
+    cout << left << setw(18) << "| Nombre: " << left << setw(18) << "| Genero: " << left <<setw(18) << "| EXP: " << left <<setw(16) << "|" << endl;
+    cout << "| " << left << setw(16) << personaje.getNombre() << "| " << left << setw(16)  << personaje.getGenero() << "| "<< left << setw(16)  << personaje.getExperiencia() << left << setw(16)  << "|" << endl;
+    cout << "+-----------------+-----------------+-----------------+\n";
+    cout << left << setw(18) << "| Rol: " << left << setw(18) << "| Raza: " << left <<setw(18) << "| Equipo: " << left <<setw(16) << "|" << endl;
+    cout << "| " << left << setw(16) << personaje.getRol() << "| " << left << setw(16)  << personaje.getRaza() << "| "<< left << setw(16)  << personaje.getEquipo() << left << setw(16)  << "|" << endl;
+    cout << "+-----------------+-----------------+-----------------+\n";
+    cout << left << setw(18) << "| Arma: " << left << setw(18) << "| Ataque: " << left <<setw(18) << "| Ubicacion: " << left <<setw(16) << "|" << endl;
+    cout << "| " << left << setw(16) << personaje.getArma().getNombre() << "| " << left << setw(16)  << to_string(personaje.getArma().getAtaque()) << "| "<< left << setw(16)  << personaje.getUbicacionActual() << left << setw(16)  << "|" << endl;
+    cout << "+-----------------+-----------------+-----------------+\n";
+    cout << left << setw(18) << "| Descripcion: " << left << setw(18) << "" << left <<setw(18) << "" << left <<setw(16) << "|" << endl;
+    cout << "| " << left << setw(16) << personaje.getArma().getDescripcion() << "" << left << setw(11)  << "" << left << setw(16)  << "|" << endl;
+    cout << "+-----------------+-----------------+-----------------+\n\n";
+
+    cout << "Inventario: " << endl;
+    cout << listaInventario.toString();
 }
 
 void MenuPersonajes::completarMision() {
-    system("clear");
+    system(CLEAR);
     string opc;
     cout << "*** Completar mision ***" << endl << endl;
     cout << "1) Tutorial." << endl;
     cout << "2) Entrenamiento mano a mano." << endl;
     cout << "3) Primer enfrentamiento." << endl;
-    do{
+    do {
         cout << "Elije una opcion: ";
         getline(cin, opc);
-    }while(opc != "1" and opc!= "2" and opc != "3");
-    if(opc == "1"){
-        if(personaje.getMisiones()[0]){
+    } while(opc != "1" and opc!= "2" and opc != "3");
+    if(opc == "1") {
+        if(personaje.getMisiones()[0]) {
             cout <<  "Mision ya hecha." << endl;
-        }
-        else{
+        } else {
             personaje.setExperiencia(100);
             personaje.setMision(0);
         }
-    }
-    else if(opc == "2"){
+    } else if(opc == "2") {
 
-        if(personaje.getMisiones()[1]){
+        if(personaje.getMisiones()[1]) {
             cout <<  "Mision ya hecha." << endl;
-        }
-        else{
+        } else {
             personaje.setExperiencia(200);
             personaje.setMision(1);
         }
-    }
-    else{
+    } else {
 
-        if(personaje.getMisiones()[2]){
+        if(personaje.getMisiones()[2]) {
             cout <<  "Mision ya hecha." << endl;
-        }
-        else{
+        } else {
             personaje.setExperiencia(300);
             personaje.setMision(2);
         }
     }
-    /*if(opc == "1"){
-        his.setTitulo("Tutorial");
-        his.setDescripcion("El usuario ha completado el tutorial.");
-        his.setExperiencia(100);
-    }
-    else if(opc == "2"){
-        his.setTitulo("Entrenamiento mano a mano");
-        his.setDescripcion("El usuario ha completado el entrenamiento mano a mano.");
-        his.setExperiencia(200);
-    }
-    else{
-        his.setTitulo("Primer enfrentamiento");
-        his.setDescripcion("El usuario ha completado el primer enfrentamiento.");
-        his.setExperiencia(300);
-    }
-    if(personaje.getListaHistorial().existeHistorial(his) == false){
-        personaje.getListaHistorial().insertar(personaje.getListaHistorial().ultimaPos(), his);
-        personaje.setExperiencia(his.getExperiencia());
-    }
-    else{
-        cout << endl << "El personaje ya ha completado esta mision." << endl;
-    }*/
 }
 
+void MenuPersonajes::mostrarMapa() {
+    system(CLEAR);
+    cout << "*** Ver mapa ***" << endl << endl;
+    string opc;
+    cout << "Mapa general: " << endl << grafoGeneral.toListaAdyacencia() << endl;
+    cout << "Mapa conocido: " << endl << grafoPersonaje.toListaAdyacencia() << endl;
+    do{
+        cout << "Desea viajar?(S/N): ";
+        getline(cin, opc);
+    }while(opc != "S" and opc != "s" and opc != "N" and opc != "n");
+    if(opc == "S" or opc == "s"){
+        system(CLEAR);
+        Vertice* origen(grafoPersonaje.regresaVertice(string(personaje.getUbicacionActual())));
+        cout << "*** Viajar ***" << endl << endl;
+        cout << "Ubicacion actual: " << personaje.getUbicacionActual() << endl;
+        cout << "Posibles destinos -> " << grafoPersonaje.toStringAdyacencias(origen) << endl;
+        cout << "Elije un destino o presione 0 para no viajar." << endl;
+        string strDestino;
+        Vertice* destino;
+        bool bandera = false;
+        do{
+            cout << ">> ";
+            getline(cin, strDestino);
+            if(!grafoPersonaje.existeVertice(strDestino) and strDestino != "0"){
+                cout << endl << "No existe el destino. Intente de nuevo." << endl;
+            }
+            else{
+                destino = grafoPersonaje.regresaVertice(strDestino);
+                if(!grafoPersonaje.existeAdyacencia(origen, destino)){
+                    cout << endl << "No existe una ruta entre " << personaje.getUbicacionActual() << " y " << strDestino << ". Intente de nuevo." << endl;
+                }
+                else{
+                    personaje.setUbicacionActual(strDestino);
+                    bandera = true;
+                }
+            }
+        }while(!bandera and strDestino != "0");
+        if(strDestino == "0"){
+            cout << personaje.getNombre() <<" se ha quedado en el pueblo actual." << endl;
+            return;
+        }
+        grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), strDestino);
+
+        Vertice* auxOrigen(grafoGeneral.regresaVertice(strDestino));
+        Vertice* auxVerticeOri(grafoPersonaje.regresaVertice(strDestino));
+        Arista* auxDestino(auxOrigen->getSigArista());
+        while(auxDestino != nullptr){
+            string auxNomDestino = auxDestino->getDestino()->getNombre();
+            grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNomDestino);
+            grafoPersonaje.insertaAdyacencia(auxVerticeOri, grafoPersonaje.regresaVertice(auxNomDestino), auxDestino->getReferencia().getPeso());
+            auxDestino = auxDestino->getSiguiente();
+        }
+        cout << personaje.getNombre() << " ha viajadoo exitosamente a " << strDestino << "." << endl;
+    }
+    else{
+        cout << personaje.getNombre() <<" se ha quedado en el pueblo actual." << endl;
+    }
+}
+
+
 void MenuPersonajes::abandonar() {
+    //Guarda lo modificado en el personaje
     string auxStr = personaje.getNombre();
     ifstream file("Archivo_Personajes.bin");
     Personaje pers;
@@ -279,6 +244,13 @@ void MenuPersonajes::abandonar() {
     file.close();
     remove("Archivo_Personajes.bin");
     rename("Temporal.bin", "Archivo_Personajes.bin");
+    //Guarda el grafo
+    string mkVertices, mkAristas;
+    mkVertices = DIR + string(pers.getNombre()) + SLASH + string(pers.getNombre()) + "_Vertices.txt";
+    mkAristas = DIR + string(pers.getNombre()) + SLASH + string(pers.getNombre()) + "_Aristas.txt";
+    grafoPersonaje.guardar(mkVertices, mkAristas);
+    grafoPersonaje.borrarTodo();
+
     cout << endl << "Regresando al menu de usuario..." << endl;
 }
 
@@ -288,11 +260,10 @@ void MenuPersonajes::pausa() {
 }
 
 MenuPersonajes::~MenuPersonajes() {
-    //dtor
 }
 
 bool MenuPersonajes::validoOpcMenu(std::string& opc) {
-    regex rx("[1-4]");
+    regex rx("[0-4]");
     if(regex_match(opc, rx) and opc.length() > 0) {
         return true;
     }
@@ -300,7 +271,7 @@ bool MenuPersonajes::validoOpcMenu(std::string& opc) {
 }
 
 bool MenuPersonajes::validoOpcModificar(std::string& opc) {
-    regex rx("[1-6]");
+    regex rx("[0-2]");
     if(regex_match(opc, rx) and opc.length() > 0) {
         return true;
     }

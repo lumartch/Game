@@ -1,14 +1,16 @@
 #ifndef LISTAINVENTARIO_H
 #define LISTAINVENTARIO_H
 
-#include "Objeto.h"
+#include <fstream>
+#include <iostream>
+#include "Arma.h"
 
 class ListaInventario {
 public:
     ListaInventario();
     bool estaVacia();
     bool estaLlena();
-    void insertar(const int& pos, const Objeto& inv);
+    void insertar(const int& pos, const Arma& inv);
     void eliminar(const int& pos);
     int primerPos();
     int ultimaPos();
@@ -17,10 +19,12 @@ public:
     int encontrar(const int&pos);
     std::string toString();
     void borrarTodo();
-    Objeto& operator[](const int& pos);
+    Arma& operator[](const int& pos);
+    void leerDelDisco(const std::string &archivo);
+    void escribirAlDisco(const std::string &archivo);
     virtual ~ListaInventario();
 private:
-    Objeto inventario[50];
+    Arma inventario[50];
     int ultimo;
     int cont;
 };

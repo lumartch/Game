@@ -6,10 +6,10 @@ Personaje::Personaje() {
     strcpy(genero, "");
     strcpy(rol, "");
     strcpy(raza, "");
-    strcpy(arma, "N/A");
+    strcpy(ubicacionActual, "");
     strcpy(equipo, "N/A");
     experiencia = 0;
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 3; i++) {
         misiones[i] = false;
     }
 }
@@ -33,8 +33,8 @@ void Personaje::setRaza(const std::string& raza) {
     strcpy(this->raza, raza.c_str());
 }
 
-void Personaje::setArma(const std::string& arma) {
-    strcpy(this->arma, arma.c_str());
+void Personaje::setArma(const Arma& arma) {
+    this->arma = arma;
 }
 
 void Personaje::setEquipo(const std::string& equipo) {
@@ -61,7 +61,7 @@ char* Personaje::getRaza() {
     return raza;
 }
 
-char* Personaje::getArma() {
+Arma Personaje::getArma() {
     return arma;
 }
 
@@ -71,17 +71,6 @@ char* Personaje::getEquipo() {
 
 long int Personaje::getExperiencia() {
     return experiencia;
-}
-
-std::string Personaje::toString() {
-    std::string res = "Nombre: " + std::string(nombre) +
-                      "\nGenero: " + std::string(genero) +
-                      "\nRol: "+ std::string(rol) +
-                      "\nRaza: " + std::string(raza) +
-                      "\nArma: " + std::string(arma) +
-                      "\nEquipo: " + std::string(equipo) +
-                      "\nExperiencia: " + std::to_string(experiencia);
-    return res;
 }
 
 void Personaje::setUsernameOwner(const std::string& usernameOwner) {
@@ -109,11 +98,10 @@ bool* Personaje::getMisiones() {
     return misiones;
 }
 
-
-/*ListaInventario& Personaje::getListaInventario() {
-    return listaInventario;
+void Personaje::setUbicacionActual(const std::string& ubicacionActual) {
+    strcpy(this->ubicacionActual, ubicacionActual.c_str());
 }
 
-ListaHistorial& Personaje::getListaHistorial() {
-    return listaHistorial;
-}*/
+char* Personaje::getUbicacionActual() {
+    return ubicacionActual;
+}

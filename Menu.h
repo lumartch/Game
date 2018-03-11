@@ -1,17 +1,10 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <iostream>
-#include <fstream>
-#include <regex>
 #include "Lista.h"
 #include "Cuenta.h"
 #include "Personaje.h"
 #include "MenuPersonajes.h"
-
-
-
-using namespace std;
 
 class Menu {
 public:
@@ -24,6 +17,7 @@ public:
     void modificarMenu(const int &pos);
     void mostrar(const int &pos);
     void mostrarTodo();
+    void mostrarPersonajes(const int &pos);
     void crearPersonaje(const int &pos);
     void eliminarPersonaje(const int &pos);
     void accederPersonaje(const int &pos);
@@ -32,6 +26,7 @@ public:
 
 private:
     Lista listaCuentas;
+    Grafo grafoGeneral;
     bool correoValido(std::string &correo);
     bool usernameValido(std::string &username);
     bool nombreValido(std::string &nombre);

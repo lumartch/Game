@@ -1,6 +1,13 @@
 #include "Menu.h"
 
 Menu::Menu() {
+    system("mkdir Personajes");
+     //Lee el grafo original
+    string dirVertice = DIRGRAFO;
+    dirVertice += "Archivo_Vertices.txt";
+    string dirArista = DIRGRAFO;
+    dirArista+= "Archivo_Aristas.txt";
+    grafoGeneral.cargar(dirVertice, dirArista);
     menuPrincipal();
 }
 
@@ -11,14 +18,14 @@ Menu::~Menu() {
 void Menu::menuPrincipal() {
     string opc;
     do {
-        system("clear");
+        system(CLEAR);
         cout << "***Menu de cuentas***" << endl << endl;
         cout << "1) Agregar usuario." << endl;
         cout << "2) Acceder." << endl;
         cout << "3) Salir." << endl;
         cout << "0) Mostrar todo(Super usuario)." << endl;
         do {
-            cout << "Elige una opcion: ";
+            cout << ">> ";
             getline(cin, opc);
             if(opc != "1" and opc != "2" and opc != "3" and opc != "0") {
                 cout << endl << "La opcion es invalida. Intente de nuevo." << endl << endl;
@@ -42,10 +49,17 @@ void Menu::menuPrincipal() {
 
 void Menu::acceder() {
     string auxUser, auxPass;
+    char ch;
     cout << endl <<"Ingrese el username: ";
     getline(cin, auxUser);
     cout << "Ingrese la contraseña: ";
-    getline(cin, auxPass);
+    while(ch != 13){
+        ch = getch();
+        if(ch != 13){
+            auxPass += ch;
+            cout << "*";
+        }
+    }
     if(!listaCuentas.cuentaCorrecta(auxUser, auxPass)) {
         cout << endl << endl << "La cuenta no existe o la contraseña no coincide. Intente de nuevo." << endl;
         pausa();
@@ -54,17 +68,18 @@ void Menu::acceder() {
     int pos = listaCuentas.busqueda(auxUser);
     string opc;
     do {
-        system("clear");
+        system(CLEAR);
         cout << "***Menu para el usuario " << listaCuentas[pos].getUserName() << "***" << endl << endl;
         cout << "1) Mostrar Cuenta." << endl;
         cout << "2) Modificar Cuenta." << endl;
         cout << "3) Eliminar Cuenta." << endl;
         cout << "4) Crear personaje." << endl;
         cout << "5) Eliminar personaje." << endl;
-        cout << "6) Acceder a personaje." << endl;
-        cout << "7) Regresar al menu principal." << endl;
+        cout << "6) Mostrar personajes disponibles." << endl;
+        cout << "7) Acceder a personaje." << endl;
+        cout << "0) Regresar al menu principal." << endl << endl;
         do {
-            cout << "Elige una opcion: ";
+            cout << ">> ";
             getline(cin, opc);
             if(!validoOpcMod(opc)) {
                 cout << endl << "La opcion es invalida. Intente de nuevo." << endl << endl;
@@ -83,18 +98,20 @@ void Menu::acceder() {
         } else if(opc == "5") {
             eliminarPersonaje(pos);
         } else if(opc == "6") {
+            mostrarPersonajes(pos);
+        } else if(opc == "7") {
             accederPersonaje(pos);
         } else {
             cout << endl << "Regresando al menu principal..." << endl;
         }
-        if(opc != "7") {
+        if(opc != "0") {
             pausa();
         }
-    } while(opc != "7");
+    } while(opc != "0");
 }
 
 void Menu::agregar() {
-    system("clear");
+    system(CLEAR);
     cout << "***Agregar cuenta***" << endl << endl;
     string auxStr, auxPass;
     Cuenta auxCuenta;
@@ -138,7 +155,7 @@ void Menu::agregar() {
 }
 
 void Menu::eliminar(const int &pos) {
-    system("clear");
+    system(CLEAR);
     string auxStr = listaCuentas[pos].getUserName();
     cout << "***Eliminar cuenta***" << endl << endl;
     string opc;
@@ -149,7 +166,7 @@ void Menu::eliminar(const int &pos) {
             opc != "N" and opc != "n");
     if(opc == "S" or opc == "s") {
         listaCuentas.eliminarDato(auxStr);
-        //Eliminar del archivo
+        //Eliminar del archivo los personajes
         cout << "Dato eliminado exitosamente." << endl;
     } else {
         cout << "Dato conservado exitosamente." << endl;
@@ -159,18 +176,19 @@ void Menu::eliminar(const int &pos) {
 void Menu::modificarMenu(const int &pos) {
     string opc, auxStr;
     do {
-        system("clear");
+        system(CLEAR);
         cout << "Modificar cuenta***" << endl;
         cout << listaCuentas[pos].toString() << endl << endl;
         cout << "Que desea modificar?" << endl;
         cout << "1) Nombre." << endl;
         cout << "2) Correo electronico." << endl;
         cout << "3) Password." << endl;
-        cout << "4) Regresar al menu anterior..." << endl;
+        cout << "0) Regresar al menu anterior..." << endl;
         do {
-            cout << "Elije una opcion: ";
+            cout << ">> ";
             getline(cin, opc);
-        } while(opc != "1" and opc != "2" and opc != "3" and opc != "4");
+        } while(opc != "1" and opc != "2" and opc != "3" and opc != "0");
+
         if(opc == "1") {
             do {
                 cout << endl << "Ingrese el nuevo nombre: ";
@@ -205,21 +223,55 @@ void Menu::modificarMenu(const int &pos) {
         } else {
             cout << endl << "Regresando al menú acceder...";
         }
-        if(opc != "4"){
+        if(opc != "0") {
             pausa();
         }
-    } while(opc != "4");
+    } while(opc != "0");
 }
 
 void Menu::mostrar(const int &pos) {
-    system("clear");
-    string auxStr;
+    system(CLEAR);
     cout << "***Mostrar usuario***" << endl << endl;
     cout << endl << listaCuentas[pos].toString() << endl;
 }
 
+void Menu::mostrarPersonajes(const int& pos) {
+    system(CLEAR);
+    cout << "*** Personajes del jugador " << listaCuentas[pos].getUserName() << "***" << endl << endl;
+    ifstream archivo("Archivo_Personajes.bin");
+    if(!archivo.good()) {
+        cout << "No hay archivo de personajes." << endl;
+    } else {
+        while(!archivo.eof()) {
+            Personaje pers;
+            archivo.read((char*)&pers, sizeof(pers));
+            if(archivo.eof()) {
+                break;
+            }
+            string auxUser = pers.getUsernameOwner();
+            if(auxUser == listaCuentas[pos].getUserName()) {
+                cout << "+-----------------+-----------------+-----------------+\n";
+                cout << left << setw(18) << "| Nombre: " << left << setw(18) << "| Genero: " << left <<setw(18) << "| EXP: " << left <<setw(16) << "|" << endl;
+                cout << "| " << left << setw(16) << pers.getNombre() << "| " << left << setw(16)  << pers.getGenero() << "| "<< left << setw(16)  << pers.getExperiencia() << left << setw(16)  << "|" << endl;
+                cout << "+-----------------+-----------------+-----------------+\n";
+                cout << left << setw(18) << "| Rol: " << left << setw(18) << "| Raza: " << left <<setw(18) << "| Equipo: " << left <<setw(16) << "|" << endl;
+                cout << "| " << left << setw(16) << pers.getRol() << "| " << left << setw(16)  << pers.getRaza() << "| "<< left << setw(16)  << pers.getEquipo() << left << setw(16)  << "|" << endl;
+                cout << "+-----------------+-----------------+-----------------+\n";
+                cout << left << setw(18) << "| Arma: " << left << setw(18) << "| Ataque: " << left <<setw(18) << "| Ubicacion: " << left <<setw(16) << "|" << endl;
+                cout << "| " << left << setw(16) << pers.getArma().getNombre() << "| " << left << setw(16)  << to_string(pers.getArma().getAtaque()) << "| "<< left << setw(16)  << pers.getUbicacionActual() << left << setw(16)  << "|" << endl;
+                cout << "+-----------------+-----------------+-----------------+\n";
+                cout << left << setw(18) << "| Descripcion: " << left << setw(18) << "" << left <<setw(18) << "" << left <<setw(16) << "|" << endl;
+                cout << "| " << left << setw(16) << pers.getArma().getDescripcion() << "" << left << setw(11)  << "" << left << setw(16)  << "|" << endl;
+                cout << "+-----------------+-----------------+-----------------+\n\n";
+            }
+        }
+    }
+    archivo.close();
+}
+
+
 void Menu::mostrarTodo() {
-    system("clear");
+    system(CLEAR);
     cout << "***Mostrar cuentas***" << endl << endl;
     for(int i = 0; i < listaCuentas.getCont(); i++) {
         cout << "Usuario #" << i + 1 << endl;
@@ -228,7 +280,7 @@ void Menu::mostrarTodo() {
 }
 
 void Menu::crearPersonaje(const int &pos) {
-    system("clear");
+    system(CLEAR);
     cout << "*** Crear personaje ***" << endl << endl;
     string usnm = listaCuentas[pos].getUserName();
     if(maxPersonajes(usnm)) {
@@ -265,7 +317,7 @@ void Menu::crearPersonaje(const int &pos) {
     }
     //raza del personaje.
     do {
-        system("clear");
+        system(CLEAR);
         cout << "*** Crear personaje ***" << endl << endl;
         cout << "Raza: " << endl;
         cout << "1) Dragonborn." << endl;
@@ -301,7 +353,7 @@ void Menu::crearPersonaje(const int &pos) {
     }
     //Rol del personaje
     do {
-        system("clear");
+        system(CLEAR);
         cout << "*** Crear personaje ***" << endl << endl;
         cout << "Rol: " << endl;
         cout << "1) Clerigo." << endl;
@@ -337,7 +389,7 @@ void Menu::crearPersonaje(const int &pos) {
     }
 
     do {
-        system("clear");
+        system(CLEAR);
         cout << "*** Crear personaje ***" << endl << endl;
         cout << "Equipo: " << endl;
         cout << "1) Renegado." << endl;
@@ -354,31 +406,68 @@ void Menu::crearPersonaje(const int &pos) {
             cout << endl << "Opcion invalida. Intente de nuevo." << endl;
         }
     } while(!validoOpcRazaRol(auxStr));
+    string auxNombreOrigen;
     if(auxStr == "1") {
         pers.setEquipo("Renegado");
+        auxNombreOrigen = grafoGeneral[0]->getNombre();
+        pers.setUbicacionActual(auxNombreOrigen);
     } else if(auxStr == "2") {
         pers.setEquipo("Circulo arcano");
-    } else if(auxStr == "3") {
+        auxNombreOrigen = grafoGeneral[1]->getNombre();
+        pers.setUbicacionActual(auxNombreOrigen);    } else if(auxStr == "3") {
         pers.setEquipo("Legion roja");
-    } else if(auxStr == "4") {
+        auxNombreOrigen = grafoGeneral[2]->getNombre();
+        pers.setUbicacionActual(auxNombreOrigen);    } else if(auxStr == "4") {
         pers.setEquipo("Guarda Gris");
+        auxNombreOrigen = grafoGeneral[3]->getNombre();
+        pers.setUbicacionActual(auxNombreOrigen);
     } else if(auxStr == "5") {
         pers.setEquipo("Qun");
+        auxNombreOrigen = grafoGeneral[4]->getNombre();
+        pers.setUbicacionActual(auxNombreOrigen);
     } else if(auxStr == "6") {
         pers.setEquipo("Berseker");
+        auxNombreOrigen = grafoGeneral[5]->getNombre();
+        pers.setUbicacionActual(auxNombreOrigen);
     } else if(auxStr == "7") {
         pers.setEquipo("Nazgul");
+        auxNombreOrigen = grafoGeneral[6]->getNombre();
+        pers.setUbicacionActual(auxNombreOrigen);
     } else {
         pers.setEquipo("Cuervo");
-    }
-
+        auxNombreOrigen = grafoGeneral[0]->getNombre();
+        pers.setUbicacionActual(auxNombreOrigen);    }
     //Nombre de usuario
     pers.setUsernameOwner(listaCuentas[pos].getUserName());
     guardarPersonaje("Archivo_Personajes.bin", pers);
+
+    //Crea directorio del personaje
+    string mkdir = MKDIR + string(pers.getNombre());
+    system(mkdir.c_str());
+
+    //Crea su posicion inicial en el grafo
+    Grafo grafoPersonaje;
+    grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNombreOrigen);
+
+    Vertice* auxOrigen(grafoGeneral.regresaVertice(auxNombreOrigen));
+    Vertice* auxVerticeOri(grafoPersonaje.regresaVertice(auxNombreOrigen));
+    Arista* auxDestino(auxOrigen->getSigArista());
+    while(auxDestino != nullptr){
+        string auxNomDestino = auxDestino->getDestino()->getNombre();
+        grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNomDestino);
+        grafoPersonaje.insertaAdyacencia(auxVerticeOri, grafoPersonaje.regresaVertice(auxNomDestino), auxDestino->getReferencia().getPeso());
+        auxDestino = auxDestino->getSiguiente();
+    }
+
+    string mkVertices, mkAristas;
+    mkVertices = DIR + string(pers.getNombre()) + SLASH + string(pers.getNombre()) + "_Vertices.txt";
+    mkAristas = DIR + string(pers.getNombre()) + SLASH + string(pers.getNombre()) + "_Aristas.txt";
+    grafoPersonaje.guardar(mkVertices, mkAristas);
+    grafoPersonaje.borrarTodo();
 }
 
 void Menu::eliminarPersonaje(const int &pos) {
-    system("clear");
+    system(CLEAR);
     string auxStr;
     string auxUser = listaCuentas[pos].getUserName();
     cout << "*** Eliminar personaje ***" << endl << endl;
@@ -386,11 +475,11 @@ void Menu::eliminarPersonaje(const int &pos) {
     getline(cin, auxStr);
     if(existePersonajeCuenta(auxStr, auxUser)) {
         string opc;
-        do{
+        do {
             cout << endl << "Seguro que desea eliminar a este personaje? (S/N): ";
             getline(cin, opc);
-        }while(opc != "S" and opc != "s" and opc != "N" and opc != "n");
-        if(opc == "S" or opc == "s"){
+        } while(opc != "S" and opc != "s" and opc != "N" and opc != "n");
+        if(opc == "S" or opc == "s") {
             ifstream file("Archivo_Personajes.bin");
             if(file.good()) {
                 Personaje pers;
@@ -408,8 +497,7 @@ void Menu::eliminarPersonaje(const int &pos) {
             file.close();
             remove("Archivo_Personajes.bin");
             rename("Temporal.bin", "Archivo_Personajes.bin");
-        }
-        else{
+        } else {
             cout << endl << "Personaje conservado!" << endl;
         }
     } else {
@@ -418,12 +506,12 @@ void Menu::eliminarPersonaje(const int &pos) {
 }
 
 void Menu::accederPersonaje(const int &pos) {
-    system("clear");
+    system(CLEAR);
     string auxStr;
     string auxUser = listaCuentas[pos].getUserName();
     cout << "*** Acceder a personaje ***" << endl << endl;
     ifstream file("Archivo_Personajes.bin");
-    if(!file.good()){
+    if(!file.good()) {
         cout << endl << "No existe el archivo de personajes. Intente de nuevo." << endl;
         file.close();
         return;
@@ -433,7 +521,7 @@ void Menu::accederPersonaje(const int &pos) {
     getline(cin, auxStr);
     if(existePersonajeCuenta(auxStr, auxUser)) {
         Personaje personaje = regresaPersonaje(auxStr, auxUser);
-        new MenuPersonajes(personaje);
+        new MenuPersonajes(personaje, grafoGeneral);
     } else {
         cout << endl << "No existe el personaje al que desea acceder. Intente de nuevo." << endl;
     }
@@ -523,7 +611,7 @@ bool Menu::existePersonajeCuenta(std::string& nomPersonaje, std::string& usernam
 
 
 bool Menu::validoOpcMod(std::string& opc) {
-    regex rx("[1-7]");
+    regex rx("[0-7]");
     if(regex_match(opc, rx) and opc.length() > 0) {
         return true;
     }
@@ -582,7 +670,9 @@ bool Menu::maxPersonajes(std::string& username) {
     if(file.good()) {
         while(!file.eof()) {
             file.read((char*)&pers, sizeof(pers));
-            if(file.eof()) {break;}
+            if(file.eof()) {
+                break;
+            }
             string auxPers = pers.getUsernameOwner();
             if(auxPers == username) {
                 i++;

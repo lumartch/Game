@@ -7,11 +7,14 @@ MenuPersonajes::MenuPersonajes() {
 MenuPersonajes::MenuPersonajes(Personaje& pers, Grafo & graf) {
     personaje = pers;
     grafoGeneral = graf;
+    string nombre = personaje.getNombre();
+    mkVertices = DIR + nombre + SLASH + nombre + "_Vertices.txt";
+    mkAristas = DIR + nombre + SLASH + nombre + "_Aristas.txt";
     //Lee del directorio el inventario
-    listaInventario.leerDelDisco(DIR + string(personaje.getNombre()) + SLASH + string(personaje.getNombre()) + "_Inventario.txt");
+    listaInventario.leerDelDisco(DIR + nombre + SLASH + nombre + "_Inventario.txt");
 
     //Lee el grafo del Personaje
-    grafoPersonaje.cargar(DIR + string(personaje.getNombre()) + SLASH + string(personaje.getNombre()) + "_Vertices.txt", DIR + string(personaje.getNombre()) + SLASH + string(personaje.getNombre()) + "_Aristas.txt");
+    grafoPersonaje.cargar(mkVertices, mkAristas);
     menuPrincipal();
 }
 
@@ -23,7 +26,7 @@ void MenuPersonajes::menuPrincipal() {
         cout << "1) Modificar atributos." << endl;
         cout << "2) Mostrar." << endl;
         cout << "3) Completar mision." << endl;
-        cout << "4) Ver mapa." << endl;
+        cout << "4) Mapas." << endl;
         cout << "0) Abandonar." << endl;
         do {
             cout << ">> ";
@@ -165,62 +168,104 @@ void MenuPersonajes::completarMision() {
 }
 
 void MenuPersonajes::mostrarMapa() {
-    system(CLEAR);
-    cout << "*** Ver mapa ***" << endl << endl;
     string opc;
-    cout << "Mapa general: " << endl << grafoGeneral.toListaAdyacencia() << endl;
-    cout << "Mapa conocido: " << endl << grafoPersonaje.toListaAdyacencia() << endl;
     do{
-        cout << "Desea viajar?(S/N): ";
-        getline(cin, opc);
-    }while(opc != "S" and opc != "s" and opc != "N" and opc != "n");
-    if(opc == "S" or opc == "s"){
         system(CLEAR);
-        Vertice* origen(grafoPersonaje.regresaVertice(string(personaje.getUbicacionActual())));
-        cout << "*** Viajar ***" << endl << endl;
-        cout << "Ubicacion actual: " << personaje.getUbicacionActual() << endl;
-        cout << "Posibles destinos -> " << grafoPersonaje.toStringAdyacencias(origen) << endl;
-        cout << "Elije un destino o presione 0 para no viajar." << endl;
-        string strDestino;
-        Vertice* destino;
-        bool bandera = false;
+        cout << "*** Mapas ***" << endl << endl;
+        cout << "Ubicacion actual: " << personaje.getUbicacionActual() << endl  << endl;
+        cout << "1) Ver informacion de la ubicacion actual." << endl;
+        cout << "2) Ver mapa global." << endl;
+        cout << "3) Ver mapa conocido." << endl;
+        cout << "4) Viajar." << endl;
+        cout << "0) Regresar..." << endl;
         do{
             cout << ">> ";
-            getline(cin, strDestino);
-            if(!grafoPersonaje.existeVertice(strDestino) and strDestino != "0"){
-                cout << endl << "No existe el destino. Intente de nuevo." << endl;
-            }
-            else{
-                destino = grafoPersonaje.regresaVertice(strDestino);
-                if(!grafoPersonaje.existeAdyacencia(origen, destino)){
-                    cout << endl << "No existe una ruta entre " << personaje.getUbicacionActual() << " y " << strDestino << ". Intente de nuevo." << endl;
+            getline(cin, opc);
+        }while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and opc != "0");
+        if(opc == "1"){
+            system(CLEAR);
+            cout << "*** Informacion ***" << endl << endl;
+            Vertice* origen(grafoPersonaje.regresaVertice(string(personaje.getUbicacionActual())));
+            cout << "+-----------------+-----------------+-----------------+\n";
+            cout << left << setw(18) << "| Ubicacion: " << left << setw(18) << "| Tipo clima: " << left <<setw(18) << "| Dificultad: " << left <<setw(16) << "|" << endl;
+            cout << "| " << left << setw(16) << origen->getNombre() << "| " << left << setw(16)  << origen->getTipoClima() << "| "<< left << setw(16)  << origen->getDificultad() << left << setw(16)  << "|" << endl;
+            cout << "+-----------------+-----------------+-----------------+\n";
+            cout << left << setw(18) << "| Recompensa: " << left << setw(18) << "| Ataque: " << left <<setw(18) << "| Precio: " << left <<setw(16) << "|" << endl;
+            cout << "| " << left << setw(16) << origen->getRecompensa().getNombre() << "| " << left << setw(16)  << to_string(origen->getRecompensa().getAtaque()) << "| "<< left << setw(16)  << to_string(origen->getRecompensa().getPrecio()) << left << setw(16)  << "|" << endl;
+            cout << "+-----------------+-----------------+-----------------+\n";
+            cout << left << setw(18) << "| Descripcion: " << left << setw(18) << "" << left <<setw(18) << "" << left <<setw(16) << "|" << endl;
+            cout << "| " << left << setw(16) << origen->getRecompensa().getDescripcion() << "" << left << setw(11)  << "" << left << setw(16)  << "|" << endl;
+            cout << "+-----------------+-----------------+-----------------+\n\n";
+            cout << "Posibles rutas " << grafoPersonaje.toStringAdyacencias(origen) << endl;
+        }
+        else if(opc == "2"){
+            system(CLEAR);
+            cout << "*** Mapa general ***" << endl << endl;
+            cout << grafoGeneral.toListaAdyacencia() << endl;
+        }
+        else if(opc == "3"){
+            system(CLEAR);
+            cout << "*** Mapa conocido ***" << endl << endl;
+            cout << grafoPersonaje.toListaAdyacencia() << endl;
+        }
+        else if(opc == "4"){
+            cout << "*** Viajar ***" << endl << endl;
+            system(CLEAR);
+            Vertice* origen(grafoPersonaje.regresaVertice(string(personaje.getUbicacionActual())));
+            cout << "*** Viajar ***" << endl << endl;
+            cout << "Ubicacion actual: " << personaje.getUbicacionActual() << endl;
+            cout << "Posibles destinos " << grafoPersonaje.toStringAdyacencias(origen) << endl;
+            cout << "Elije un destino o presione 0 para no viajar." << endl;
+            string strDestino;
+            Vertice* destino;
+            bool bandera = false;
+            do{
+                cout << ">> ";
+                getline(cin, strDestino);
+                if(!grafoPersonaje.existeVertice(strDestino) and strDestino != "0"){
+                    cout << endl << "No existe el destino. Intente de nuevo." << endl;
                 }
                 else{
-                    personaje.setUbicacionActual(strDestino);
-                    bandera = true;
+                    destino = grafoPersonaje.regresaVertice(strDestino);
+                    if(!grafoPersonaje.existeAdyacencia(origen, destino)){
+                        cout << endl << "No existe una ruta entre " << personaje.getUbicacionActual() << " y " << strDestino << ". Intente de nuevo." << endl;
+                    }
+                    else{
+                        personaje.setUbicacionActual(strDestino);
+                        bandera = true;
+                    }
                 }
+            }while(!bandera and strDestino != "0");
+            if(strDestino == "0"){
+                cout << personaje.getNombre() <<" se ha quedado en el pueblo actual." << endl;
+                return;
             }
-        }while(!bandera and strDestino != "0");
-        if(strDestino == "0"){
-            cout << personaje.getNombre() <<" se ha quedado en el pueblo actual." << endl;
-            return;
-        }
-        grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), strDestino);
+            Vertice* auxOrigen(grafoGeneral.regresaVertice(strDestino));
+            string tip = auxOrigen->getTipoClima();
+            string dif = auxOrigen->getDificultad();
+            Arma rec = auxOrigen->getRecompensa();
+            grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), strDestino, tip, dif, rec);
 
-        Vertice* auxOrigen(grafoGeneral.regresaVertice(strDestino));
-        Vertice* auxVerticeOri(grafoPersonaje.regresaVertice(strDestino));
-        Arista* auxDestino(auxOrigen->getSigArista());
-        while(auxDestino != nullptr){
-            string auxNomDestino = auxDestino->getDestino()->getNombre();
-            grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNomDestino);
-            grafoPersonaje.insertaAdyacencia(auxVerticeOri, grafoPersonaje.regresaVertice(auxNomDestino), auxDestino->getReferencia().getPeso());
-            auxDestino = auxDestino->getSiguiente();
+            Vertice* auxVerticeOri(grafoPersonaje.regresaVertice(strDestino));
+            Arista* auxDestino(auxOrigen->getSigArista());
+            while(auxDestino != nullptr){
+                string auxNomDestino = auxDestino->getDestino()->getNombre();
+                tip = auxVerticeOri->getTipoClima();
+                dif = auxVerticeOri->getDificultad();
+                rec = auxVerticeOri->getRecompensa();
+                grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNomDestino, tip, dif, rec);
+                grafoPersonaje.insertaAdyacencia(auxVerticeOri, grafoPersonaje.regresaVertice(auxNomDestino), auxDestino->getReferencia().getNivelNecesario());
+                auxDestino = auxDestino->getSiguiente();
+            }
+            cout << personaje.getNombre() << " ha viajadoo exitosamente a " << strDestino << "." << endl;
         }
-        cout << personaje.getNombre() << " ha viajadoo exitosamente a " << strDestino << "." << endl;
-    }
-    else{
-        cout << personaje.getNombre() <<" se ha quedado en el pueblo actual." << endl;
-    }
+        else{
+            cout << endl <<"Regresando al menu de personaje..." << endl;
+        }
+        if(opc != "0"){
+            pausa();
+        }
+    }while(opc != "0");
 }
 
 
@@ -244,10 +289,14 @@ void MenuPersonajes::abandonar() {
     file.close();
     remove("Archivo_Personajes.bin");
     rename("Temporal.bin", "Archivo_Personajes.bin");
+
     //Guarda el grafo
     string mkVertices, mkAristas;
-    mkVertices = DIR + string(pers.getNombre()) + SLASH + string(pers.getNombre()) + "_Vertices.txt";
-    mkAristas = DIR + string(pers.getNombre()) + SLASH + string(pers.getNombre()) + "_Aristas.txt";
+
+    string nombre = personaje.getNombre();
+
+    remove(mkVertices.c_str());
+    remove(mkAristas.c_str());
     grafoPersonaje.guardar(mkVertices, mkAristas);
     grafoPersonaje.borrarTodo();
 

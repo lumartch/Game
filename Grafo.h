@@ -1,6 +1,7 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
+#include "Arma.h"
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -12,18 +13,19 @@ class Referencia;
 
 class Referencia{
 private:
-    int peso;
-    char actual[20];
-    char siguiente[20];
+    int nivelNecesario;
+    char origen[20];
+    char destino[20];
+
 public:
     Referencia();
-    Referencia(const int &peso);
-    void setPeso(const int& peso);
-    int getPeso();
-    void setActual(const char* actual);
-    char* getActual();
-    void setSiguiente(const char* siguiente);
-    char* getSiguiente();
+    Referencia(const int &nivelNecesario);
+    void setNivelNecesario(const int& nivelNecesario);
+    int getNivelNecesario();
+    void setOrigen(const char* origen);
+    char* getOrigen();
+    void setDestino(const char* destino);
+    char* getDestino();
 };
 
 class Arista {
@@ -48,13 +50,22 @@ public:
 class Vertice{
 private:
     char nombre[20];
+    char tipoClima[20];
+    char dificultad[20];
+    Arma recompensa;
     Arista *sigArista;
     Vertice *sigVertice;
 public:
     Vertice();
-    Vertice(const std::string & nombre);
+    Vertice(const std::string & nombre, const std::string &tipoClima, const std::string& dificultad, const Arma& recompensa);
     void setNombre(const std::string &nombre);
     char* getNombre();
+    void setTipoClima(const std::string &tipoClima);
+    char* getTipoClima();
+    void setDificultad(const std::string &dificultad);
+    char* getDificultad();
+    void setRecompensa(const Arma &recompensa);
+    Arma getRecompensa();
     void setSigVertice(Vertice* sigVertice);
     Vertice* getSigVertice();
     void setSigArista(Arista* sigArista);
@@ -68,7 +79,7 @@ private:
 public:
     Grafo();
     //Vertices
-    void insertarVertice(Vertice* verPos, std::string &nombre);
+    void insertarVertice(Vertice* verPos, std::string &nombre, std::string &tipoClima, std::string &dificultad, Arma& recompensa);
     Vertice* verticePrimerPos();
     Vertice* verticePosSiguiente(Vertice* pos);
     Vertice* verticePosAnterior(Vertice* pos);

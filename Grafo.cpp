@@ -1,37 +1,37 @@
 #include "Grafo.h"
 
 Referencia::Referencia() {
-    peso = 0;
-    strcpy(actual, "");
-    strcpy(siguiente, "");
+    nivelNecesario = 0;
+    strcpy(origen, "");
+    strcpy(destino, "");
 }
 
-Referencia::Referencia(const int& peso) : Referencia() {
-    this->peso = peso;
+Referencia::Referencia(const int& nivelNecesario) : Referencia() {
+    this->nivelNecesario = nivelNecesario;
 }
 
-void Referencia::setPeso(const int& peso) {
-    this->peso = peso;
+void Referencia::setNivelNecesario(const int& nivelNecesario) {
+    this->nivelNecesario = nivelNecesario;
 }
 
-int Referencia::getPeso() {
-    return peso;
+int Referencia::getNivelNecesario() {
+    return nivelNecesario;
 }
 
-void Referencia::setActual(const char* actual) {
-    strcpy(this->actual, actual);
+void Referencia::setOrigen(const char* origen) {
+    strcpy(this->origen, origen);
 }
 
-char* Referencia::getActual() {
-    return actual;
+char* Referencia::getOrigen() {
+    return origen;
 }
 
-void Referencia::setSiguiente(const char* siguiente) {
-    strcpy(this->siguiente, siguiente);
+void Referencia::setDestino(const char* destino) {
+    strcpy(this->destino, destino);
 }
 
-char* Referencia::getSiguiente() {
-    return siguiente;
+char* Referencia::getDestino() {
+    return destino;
 }
 
 Arista::Arista() {
@@ -81,8 +81,11 @@ Vertice::Vertice() {
     sigVertice = nullptr;
 }
 
-Vertice::Vertice(const std::string& nombre) : Vertice() {
+Vertice::Vertice(const std::string & nombre, const std::string &tipoClima, const std::string& dificultad, const Arma& recompensa) : Vertice() {
     strcpy(this->nombre, nombre.c_str());
+    strcpy(this->tipoClima, tipoClima.c_str());
+    strcpy(this->dificultad, dificultad.c_str());
+    this->recompensa = recompensa;
 }
 
 void Vertice::setNombre(const std::string& nombre) {
@@ -91,6 +94,30 @@ void Vertice::setNombre(const std::string& nombre) {
 
 char* Vertice::getNombre() {
     return nombre;
+}
+
+void Vertice::setTipoClima(const std::string& tipoClima) {
+    strcpy(this->tipoClima, tipoClima.c_str());
+}
+
+char* Vertice::getTipoClima() {
+    return tipoClima;
+}
+
+void Vertice::setDificultad(const std::string& dificultad) {
+    strcpy(this->dificultad, dificultad.c_str());
+}
+
+char* Vertice::getDificultad() {
+    return dificultad;
+}
+
+void Vertice::setRecompensa(const Arma& recompensa) {
+    this->recompensa = recompensa;
+}
+
+Arma Vertice::getRecompensa() {
+    return recompensa;
 }
 
 void Vertice::setSigVertice(Vertice* sigVertice) {
@@ -118,11 +145,11 @@ Grafo::~Grafo() {
     borrarTodo();
 }
 
-void Grafo::insertarVertice(Vertice* verPos, std::string & nombre) {
+void Grafo::insertarVertice(Vertice* verPos, std::string &nombre, std::string &tipoClima, std::string &dificultad, Arma& recompensa) {
     if(existeVertice(nombre)) {
         return;
     }
-    Vertice* aux(new Vertice(nombre));
+    Vertice* aux(new Vertice(nombre, tipoClima, dificultad, recompensa));
     if(verPos == nullptr) {
         aux->setSigVertice(primero);
         primero = aux;
@@ -213,11 +240,11 @@ void Grafo::eliminarVertice(Vertice* vertice) {
 }
 
 
-void Grafo::insertaAdyacencia(Vertice* origen, Vertice* destino, const int& peso = 0) {
+void Grafo::insertaAdyacencia(Vertice* origen, Vertice* destino, const int& nivelNecesario = 0) {
     if(existeAdyacencia(origen, destino)) {
         return;
     }
-    Referencia refer(peso);
+    Referencia refer(nivelNecesario);
     Arista* aux(new Arista(refer));
     Arista* ultimaPos = adyacenciaUltimaPos(origen);
     Arista* primerPos = adyacenciaPrimerPos(origen);
@@ -320,17 +347,26 @@ void Grafo::guardar(const std::string& archivoVertice, const std::string& archiv
     while(aux != nullptr) {
         //Guardado de vertices
         char origen[20];
+        char tipoClima[20];
+        char dificultad[20];
+        Arma recompensa;
         strcpy(origen, aux->getNombre());
+        strcpy(tipoClima, aux->getTipoClima());
+        strcpy(dificultad, aux->getDificultad());
+        recompensa = aux->getRecompensa();
         file_vertices.write((char*)&origen, sizeof(origen));
+        file_vertices.write((char*)&tipoClima, sizeof(tipoClima));
+        file_vertices.write((char*)&dificultad, sizeof(dificultad));
+        file_vertices.write((char*)&recompensa, sizeof(recompensa));
         //Guardadp de aristas
         std::ofstream file_Aristas(archivoArista, std::ios::app);
         Arista* auxArista(aux->getSigArista());
         while(auxArista != nullptr) {
             char destino[20];
             Referencia refer = auxArista->getReferencia();
-            refer.setActual(origen);
+            refer.setOrigen(origen);
             strcpy(destino, auxArista->getDestino()->getNombre());
-            refer.setSiguiente(destino);
+            refer.setDestino(destino);
             file_Aristas.write((char*)&refer, sizeof(refer));
             auxArista = auxArista->getSiguiente();
         }
@@ -346,12 +382,20 @@ void Grafo::cargar(const std::string& archivoVertice, const std::string& archivo
     if(file_vertices.good()) {
         while(!file_vertices.eof()) {
             char origen[20];
+            char tipoClima[20];
+            char dificultad[20];
+            Arma recompensa;
             file_vertices.read((char*)&origen, sizeof(origen));
+            file_vertices.read((char*)&tipoClima, sizeof(tipoClima));
+            file_vertices.read((char*)&dificultad, sizeof(dificultad));
+            file_vertices.read((char*)&recompensa, sizeof(recompensa));
             if(file_vertices.eof()) {
                 break;
             }
             std::string nom = origen;
-            insertarVertice(verticeUltimaPos(), nom);
+            std::string tip = tipoClima;
+            std::string dif = dificultad;
+            insertarVertice(verticeUltimaPos(), nom, tip, dif, recompensa);
         }
     }
     file_vertices.close();
@@ -365,12 +409,12 @@ void Grafo::cargar(const std::string& archivoVertice, const std::string& archivo
             if(file_aristas.eof()) {
                 break;
             }
-            std::string orig = refer.getActual();
-            std::string dest = refer.getSiguiente();
-            int peso = refer.getPeso();
+            std::string orig = refer.getOrigen();
+            std::string dest = refer.getDestino();
+            int nivelNecesario = refer.getNivelNecesario();
             Vertice *origen(regresaVertice(orig));
             Vertice *destino(regresaVertice(dest));
-            insertaAdyacencia(origen, destino, peso);
+            insertaAdyacencia(origen, destino, nivelNecesario);
         }
     }
     file_aristas.close();
@@ -415,7 +459,7 @@ std::string Grafo::toStringAdyacencias(Vertice* origen) {
     std::string res;
     Arista* aux(origen->getSigArista());
     while(aux != nullptr) {
-        res += "-->" + std::string(aux->getDestino()->getNombre()) + ":" + std::to_string(aux->getReferencia().getPeso());
+        res += "-->" + std::string(aux->getDestino()->getNombre()) + ":" + std::to_string(aux->getReferencia().getNivelNecesario());
         aux = aux->getSiguiente();
     }
     return res;

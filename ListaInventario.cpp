@@ -88,6 +88,7 @@ std::string ListaInventario::toString() {
     return res;
 }
 
+
 void ListaInventario::borrarTodo() {
     ultimo = -1;
 }
@@ -96,8 +97,8 @@ void ListaInventario::leerDelDisco(const std::string &archivo) {
     std::ifstream file(archivo);
     std::string auxStr;
     Arma arma;
-    if(file.good()){
-        while(!file.eof()){
+    if(file.good()) {
+        while(!file.eof()) {
             getline(file, auxStr, '|');
             arma.setNombre(auxStr);
             getline(file, auxStr, '|');
@@ -106,11 +107,12 @@ void ListaInventario::leerDelDisco(const std::string &archivo) {
             arma.setAtaque(atoi(auxStr.c_str()));
             getline(file, auxStr, '\n');
             arma.setPrecio(atoi(auxStr.c_str()));
-            if(file.eof()){break;}
+            if(file.eof()) {
+                break;
+            }
             insertar(ultimaPos(), arma);
         }
-    }
-    else{
+    } else {
         std::ofstream fout(archivo);
         fout.close();
     }
@@ -119,7 +121,7 @@ void ListaInventario::leerDelDisco(const std::string &archivo) {
 
 void ListaInventario::escribirAlDisco(const std::string &archivo) {
     std::ofstream file(archivo);
-    for(int i = 0; i < ultimo; i++){
+    for(int i = 0; i <= ultimo; i++) {
         file << inventario[i].toFile();
     }
     file.close();

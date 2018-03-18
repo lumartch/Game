@@ -22,7 +22,6 @@
 #include "Grafo.h"
 #include <iostream>
 #include <regex>
-#include <conio.h>
 #include <fstream>
 #include <iomanip>
 
@@ -45,6 +44,7 @@ private:
     Personaje personaje;
     Grafo grafoPersonaje;
     Grafo grafoGeneral;
+    string mkVertices, mkAristas;
     ListaHistorial listaHistorial;
     ListaInventario listaInventario;
     bool validoOpcMenu(std::string &opc);

@@ -49,17 +49,18 @@ void Menu::menuPrincipal() {
 
 void Menu::acceder() {
     string auxUser, auxPass;
-    char ch;
     cout << endl <<"Ingrese el username: ";
     getline(cin, auxUser);
     cout << "Ingrese la contraseña: ";
+    getline(cin, auxPass);
+    /*char ch;
     while(ch != 13){
-        ch = getch();
+        ch = cin.get();
         if(ch != 13){
             auxPass += ch;
             cout << "*";
         }
-    }
+    }*/
     if(!listaCuentas.cuentaCorrecta(auxUser, auxPass)) {
         cout << endl << endl << "La cuenta no existe o la contraseña no coincide. Intente de nuevo." << endl;
         pausa();
@@ -370,22 +371,55 @@ void Menu::crearPersonaje(const int &pos) {
             cout << endl << "Opcion invalida. Intente de nuevo." << endl;
         }
     } while(!validoOpcRazaRol(auxStr));
+    Arma arm;
     if(auxStr == "1") {
         pers.setRol("Clerigo");
+        arm.setNombre("Mazo de Milil");
+        arm.setAtaque(50);
+        arm.setDescripcion("Mazo del dios de la luz");
+        arm.setPrecio(10);
     } else if(auxStr == "2") {
         pers.setRol("Luchador");
+        arm.setNombre("Mazo de Akadi");
+        arm.setAtaque(50);
+        arm.setDescripcion("Mazo del dios del aire");
+        arm.setPrecio(10);
     } else if(auxStr == "3") {
         pers.setRol("Paladin");
+        arm.setNombre("Espada de Ilmater");
+        arm.setAtaque(50);
+        arm.setDescripcion("Espada del dios de la rectitud");
+        arm.setPrecio(10);
     } else if(auxStr == "4") {
         pers.setRol("Explorador");
+        arm.setNombre("Daga de Beshaba");
+        arm.setAtaque(50);
+        arm.setDescripcion("Daga de la diosa del engaño");
+        arm.setPrecio(10);
     } else if(auxStr == "5") {
         pers.setRol("Picaro");
+        arm.setNombre("Arco de Savras");
+        arm.setAtaque(50);
+        arm.setDescripcion("Arco del dios del destino");
+        arm.setPrecio(10);
     } else if(auxStr == "6") {
         pers.setRol("Chaman");
+        arm.setNombre("Baston de Elune");
+        arm.setAtaque(50);
+        arm.setDescripcion("Baston de la diosa de la luna");
+        arm.setPrecio(10);
     } else if(auxStr == "7") {
         pers.setRol("Señor de la guerra");
+        arm.setNombre("Espada de Tyr");
+        arm.setAtaque(50);
+        arm.setDescripcion("Espada del dios de la justicia");
+        arm.setPrecio(10);
     } else {
         pers.setRol("Mago");
+        arm.setNombre("Bastón de Gregoir");
+        arm.setAtaque(50);
+        arm.setDescripcion("Baston del dios de la sabiduria");
+        arm.setPrecio(10);
     }
 
     do {
@@ -416,10 +450,10 @@ void Menu::crearPersonaje(const int &pos) {
         auxNombreOrigen = grafoGeneral[1]->getNombre();
         pers.setUbicacionActual(auxNombreOrigen);    } else if(auxStr == "3") {
         pers.setEquipo("Legion roja");
-        auxNombreOrigen = grafoGeneral[2]->getNombre();
+        auxNombreOrigen = grafoGeneral[3]->getNombre();
         pers.setUbicacionActual(auxNombreOrigen);    } else if(auxStr == "4") {
         pers.setEquipo("Guarda Gris");
-        auxNombreOrigen = grafoGeneral[3]->getNombre();
+        auxNombreOrigen = grafoGeneral[2]->getNombre();
         pers.setUbicacionActual(auxNombreOrigen);
     } else if(auxStr == "5") {
         pers.setEquipo("Qun");
@@ -435,27 +469,39 @@ void Menu::crearPersonaje(const int &pos) {
         pers.setUbicacionActual(auxNombreOrigen);
     } else {
         pers.setEquipo("Cuervo");
-        auxNombreOrigen = grafoGeneral[0]->getNombre();
+        auxNombreOrigen = grafoGeneral[7]->getNombre();
         pers.setUbicacionActual(auxNombreOrigen);    }
+
     //Nombre de usuario
     pers.setUsernameOwner(listaCuentas[pos].getUserName());
-    guardarPersonaje("Archivo_Personajes.bin", pers);
 
     //Crea directorio del personaje
     string mkdir = MKDIR + string(pers.getNombre());
     system(mkdir.c_str());
 
+    //Crea el arma con la que inicia el personaje
+    ListaInventario l;
+    l.insertar(l.ultimaPos(), arm);
+    string dirLista = DIR + string(pers.getNombre()) + SLASH + string(pers.getNombre()) + "_Inventario.txt";
+    l.escribirAlDisco(dirLista);
+
     //Crea su posicion inicial en el grafo
     Grafo grafoPersonaje;
-    grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNombreOrigen);
-
     Vertice* auxOrigen(grafoGeneral.regresaVertice(auxNombreOrigen));
+    string tip = auxOrigen->getTipoClima();
+    string dif = auxOrigen->getDificultad();
+    Arma rec = auxOrigen->getRecompensa();
+    grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNombreOrigen, tip, dif, rec);
+
     Vertice* auxVerticeOri(grafoPersonaje.regresaVertice(auxNombreOrigen));
     Arista* auxDestino(auxOrigen->getSigArista());
     while(auxDestino != nullptr){
         string auxNomDestino = auxDestino->getDestino()->getNombre();
-        grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNomDestino);
-        grafoPersonaje.insertaAdyacencia(auxVerticeOri, grafoPersonaje.regresaVertice(auxNomDestino), auxDestino->getReferencia().getPeso());
+        tip = auxVerticeOri->getTipoClima();
+        dif = auxVerticeOri->getDificultad();
+        rec = auxVerticeOri->getRecompensa();
+        grafoPersonaje.insertarVertice(grafoPersonaje.verticeUltimaPos(), auxNomDestino, tip, dif, rec);
+        grafoPersonaje.insertaAdyacencia(auxVerticeOri, grafoPersonaje.regresaVertice(auxNomDestino), auxDestino->getReferencia().getNivelNecesario());
         auxDestino = auxDestino->getSiguiente();
     }
 
@@ -464,6 +510,9 @@ void Menu::crearPersonaje(const int &pos) {
     mkAristas = DIR + string(pers.getNombre()) + SLASH + string(pers.getNombre()) + "_Aristas.txt";
     grafoPersonaje.guardar(mkVertices, mkAristas);
     grafoPersonaje.borrarTodo();
+
+    //Guarda el personaje en archivo binario
+    guardarPersonaje("Archivo_Personajes.bin", pers);
 }
 
 void Menu::eliminarPersonaje(const int &pos) {

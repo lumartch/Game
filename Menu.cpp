@@ -2,12 +2,13 @@
 
 Menu::Menu() {
     system("mkdir Personajes");
-     //Lee el grafo original
+    //Lee el grafo original
     string dirVertice = DIRGRAFO;
     dirVertice += "Archivo_Vertices.txt";
     string dirArista = DIRGRAFO;
     dirArista+= "Archivo_Aristas.txt";
     grafoGeneral.cargar(dirVertice, dirArista);
+    listaInvertida.cargarDesdeDisco();
     menuPrincipal();
 }
 
@@ -22,29 +23,33 @@ void Menu::menuPrincipal() {
         cout << "***Menu de cuentas***" << endl << endl;
         cout << "1) Agregar usuario." << endl;
         cout << "2) Acceder." << endl;
-        cout << "3) Salir." << endl;
-        cout << "0) Mostrar todo(Super usuario)." << endl;
+        cout << "3) Lista Invertida." << endl;
+        cout << "4) Salir" << endl;
+        cout << "0) Mostrar todo(Super usuario)." << endl << endl;
         do {
             cout << ">> ";
             getline(cin, opc);
-            if(opc != "1" and opc != "2" and opc != "3" and opc != "0") {
+            if(opc != "1" and opc != "2" and opc != "3" and opc != "4" and opc != "0") {
                 cout << endl << "La opcion es invalida. Intente de nuevo." << endl << endl;
             }
-        } while(opc != "1" and opc != "2" and opc != "3" and opc != "0");
+        } while(opc != "1" and opc != "2" and opc != "3" and opc != "4" and opc != "0");
         if(opc == "1") {
             agregar();
         } else if(opc == "2") {
             acceder();
+        } else if(opc == "3") {
+            mostrarListaInvertida();
         } else if(opc == "0") {
             mostrarTodo();
         } else {
+            listaInvertida.guardarEnDisco();
             listaCuentas.guardarEnDisco();
             salir();
         }
         if(opc != "2") {
             pausa();
         }
-    } while(opc != "3");
+    } while(opc != "4");
 }
 
 void Menu::acceder() {
@@ -53,14 +58,6 @@ void Menu::acceder() {
     getline(cin, auxUser);
     cout << "Ingrese la contraseña: ";
     getline(cin, auxPass);
-    /*char ch;
-    while(ch != 13){
-        ch = cin.get();
-        if(ch != 13){
-            auxPass += ch;
-            cout << "*";
-        }
-    }*/
     if(!listaCuentas.cuentaCorrecta(auxUser, auxPass)) {
         cout << endl << endl << "La cuenta no existe o la contraseña no coincide. Intente de nuevo." << endl;
         pausa();
@@ -75,9 +72,11 @@ void Menu::acceder() {
         cout << "2) Modificar Cuenta." << endl;
         cout << "3) Eliminar Cuenta." << endl;
         cout << "4) Crear personaje." << endl;
-        cout << "5) Eliminar personaje." << endl;
-        cout << "6) Mostrar personajes disponibles." << endl;
-        cout << "7) Acceder a personaje." << endl;
+        cout << "5) Eliminar personaje (Físico)." << endl;
+        cout << "6) Eliminar personaje (Lógico)." << endl;
+        cout << "7) Activar personaje (Lógico)." << endl;
+        cout << "8) Mostrar personajes disponibles." << endl;
+        cout << "9) Acceder a personaje." << endl;
         cout << "0) Regresar al menu principal." << endl << endl;
         do {
             cout << ">> ";
@@ -97,10 +96,14 @@ void Menu::acceder() {
         } else if(opc == "4") {
             crearPersonaje(pos);
         } else if(opc == "5") {
-            eliminarPersonaje(pos);
+            //eliminarPersonaje(pos);
         } else if(opc == "6") {
-            mostrarPersonajes(pos);
+            eliminarLogico(pos);
         } else if(opc == "7") {
+            activarLogico(pos);
+        } else if(opc == "8") {
+            mostrarPersonajes(pos);
+        } else if(opc == "9") {
             accederPersonaje(pos);
         } else {
             cout << endl << "Regresando al menu principal..." << endl;
@@ -166,7 +169,11 @@ void Menu::eliminar(const int &pos) {
     } while(opc != "S" and opc != "s" and
             opc != "N" and opc != "n");
     if(opc == "S" or opc == "s") {
+        int posIndice = listaCuentas[pos].getPosIndice();
         listaCuentas.eliminarDato(auxStr);
+
+        std::cout << "ASD " << std::endl;
+        listaInvertida.eliminacionPersonajesLogica(posIndice);
         //Eliminar del archivo los personajes
         cout << "Dato eliminado exitosamente." << endl;
     } else {
@@ -243,28 +250,31 @@ void Menu::mostrarPersonajes(const int& pos) {
     if(!archivo.good()) {
         cout << "No hay archivo de personajes." << endl;
     } else {
-        while(!archivo.eof()) {
+        int posIndice = listaCuentas[pos].getPosIndice();
+        //cout << posIndice;
+        if(posIndice == -1){
+            cout << "La cuenta no tiene personajes ingresados. Intente de nuevo.";
+            return;
+        }
+        NodoInvertida* aux = listaInvertida[posIndice];
+        while(aux != nullptr) {
             Personaje pers;
-            archivo.read((char*)&pers, sizeof(pers));
-            if(archivo.eof()) {
-                break;
-            }
-            string auxUser = pers.getUsernameOwner();
-            if(auxUser == listaCuentas[pos].getUserName()) {
-                cout << "+-----------------+-----------------+-----------------+\n";
-                cout << left << setw(18) << "| Nombre: " << left << setw(18) << "| Genero: " << left <<setw(18) << "| EXP: " << left <<setw(16) << "|" << endl;
-                cout << "| " << left << setw(16) << pers.getNombre() << "| " << left << setw(16)  << pers.getGenero() << "| "<< left << setw(16)  << pers.getExperiencia() << left << setw(16)  << "|" << endl;
-                cout << "+-----------------+-----------------+-----------------+\n";
-                cout << left << setw(18) << "| Rol: " << left << setw(18) << "| Raza: " << left <<setw(18) << "| Equipo: " << left <<setw(16) << "|" << endl;
-                cout << "| " << left << setw(16) << pers.getRol() << "| " << left << setw(16)  << pers.getRaza() << "| "<< left << setw(16)  << pers.getEquipo() << left << setw(16)  << "|" << endl;
-                cout << "+-----------------+-----------------+-----------------+\n";
-                cout << left << setw(18) << "| Arma: " << left << setw(18) << "| Ataque: " << left <<setw(18) << "| Ubicacion: " << left <<setw(16) << "|" << endl;
-                cout << "| " << left << setw(16) << pers.getArma().getNombre() << "| " << left << setw(16)  << to_string(pers.getArma().getAtaque()) << "| "<< left << setw(16)  << pers.getUbicacionActual() << left << setw(16)  << "|" << endl;
-                cout << "+-----------------+-----------------+-----------------+\n";
-                cout << left << setw(18) << "| Descripcion: " << left << setw(18) << "" << left <<setw(18) << "" << left <<setw(16) << "|" << endl;
-                cout << "| " << left << setw(16) << pers.getArma().getDescripcion() << "" << left << setw(11)  << "" << left << setw(16)  << "|" << endl;
-                cout << "+-----------------+-----------------+-----------------+\n\n";
-            }
+            archivo.seekg(aux->getDato().getPosArchivo(), ios::beg);
+            archivo.read((char*)&pers, sizeof(Personaje));
+            cout << "+-----------------+-----------------+-----------------+\n";
+            cout << left << setw(18) << "| Nombre: " << left << setw(18) << "| Genero: " << left <<setw(18) << "| EXP: " << left <<setw(16) << "|" << endl;
+            cout << "| " << left << setw(16) << pers.getNombre() << "| " << left << setw(16)  << pers.getGenero() << "| "<< left << setw(16)  << pers.getExperiencia() << left << setw(16)  << "|" << endl;
+            cout << "+-----------------+-----------------+-----------------+\n";
+            cout << left << setw(18) << "| Rol: " << left << setw(18) << "| Raza: " << left <<setw(18) << "| Equipo: " << left <<setw(16) << "|" << endl;
+            cout << "| " << left << setw(16) << pers.getRol() << "| " << left << setw(16)  << pers.getRaza() << "| "<< left << setw(16)  << pers.getEquipo() << left << setw(16)  << "|" << endl;
+            cout << "+-----------------+-----------------+-----------------+\n";
+            cout << left << setw(18) << "| Arma: " << left << setw(18) << "| Ataque: " << left <<setw(18) << "| Ubicacion: " << left <<setw(16) << "|" << endl;
+            cout << "| " << left << setw(16) << pers.getArma().getNombre() << "| " << left << setw(16)  << to_string(pers.getArma().getAtaque()) << "| "<< left << setw(16)  << pers.getUbicacionActual() << left << setw(16)  << "|" << endl;
+            cout << "+-----------------+-----------------+-----------------+\n";
+            cout << left << setw(18) << "| Descripcion: " << left << setw(18) << "" << left <<setw(18) << "" << left <<setw(16) << "|" << endl;
+            cout << "| " << left << setw(16) << pers.getArma().getDescripcion() << "" << left << setw(11)  << "" << left << setw(16)  << "|" << endl;
+            cout << "+-----------------+-----------------+-----------------+\n\n";
+            aux = aux->getSigPers();
         }
     }
     archivo.close();
@@ -284,10 +294,28 @@ void Menu::crearPersonaje(const int &pos) {
     system(CLEAR);
     cout << "*** Crear personaje ***" << endl << endl;
     string usnm = listaCuentas[pos].getUserName();
-    if(maxPersonajes(usnm)) {
+    if(maxPersonajes(usnm, pos)) {
         cout << "Esta cuenta ya cuenta con el maximo de personajes a ingresar. \n"
-             "No puede ingresar mas personajes." << endl;
-        return;
+             "¿Desea poder ingresar un nuevo personaje?. (S/N)" << endl << endl;
+        string opc;
+        do {
+            cout << ">> ";
+            getline(cin, opc);
+        } while(opc != "s" and opc != "S" and opc != "n" and opc != "N");
+        if(opc == "s" or opc == "S") {
+            int maximo = listaCuentas[pos].getMaxPersonajes();
+            if(maximo == 10) {
+                cout << endl << "No se puede actualizar a mas de 10 personajes.";
+                return;
+            } else {
+                listaCuentas[pos].setMaxPersonajes(++maximo);
+                cout << endl << "Se ha actualizado el maximo de personajes. Ahora procedera a ingresar el nuevo personaje....";
+                pausa();
+            }
+        } else {
+            cout << "No se actualizo el maximo de personajes.";
+            return;
+        }
     }
     Personaje pers;
     string auxStr;
@@ -448,10 +476,12 @@ void Menu::crearPersonaje(const int &pos) {
     } else if(auxStr == "2") {
         pers.setEquipo("Circulo arcano");
         auxNombreOrigen = grafoGeneral[1]->getNombre();
-        pers.setUbicacionActual(auxNombreOrigen);    } else if(auxStr == "3") {
+        pers.setUbicacionActual(auxNombreOrigen);
+    } else if(auxStr == "3") {
         pers.setEquipo("Legion roja");
         auxNombreOrigen = grafoGeneral[3]->getNombre();
-        pers.setUbicacionActual(auxNombreOrigen);    } else if(auxStr == "4") {
+        pers.setUbicacionActual(auxNombreOrigen);
+    } else if(auxStr == "4") {
         pers.setEquipo("Guarda Gris");
         auxNombreOrigen = grafoGeneral[2]->getNombre();
         pers.setUbicacionActual(auxNombreOrigen);
@@ -470,7 +500,8 @@ void Menu::crearPersonaje(const int &pos) {
     } else {
         pers.setEquipo("Cuervo");
         auxNombreOrigen = grafoGeneral[7]->getNombre();
-        pers.setUbicacionActual(auxNombreOrigen);    }
+        pers.setUbicacionActual(auxNombreOrigen);
+    }
 
     //Nombre de usuario
     pers.setUsernameOwner(listaCuentas[pos].getUserName());
@@ -495,7 +526,7 @@ void Menu::crearPersonaje(const int &pos) {
 
     Vertice* auxVerticeOri(grafoPersonaje.regresaVertice(auxNombreOrigen));
     Arista* auxDestino(auxOrigen->getSigArista());
-    while(auxDestino != nullptr){
+    while(auxDestino != nullptr) {
         string auxNomDestino = auxDestino->getDestino()->getNombre();
         tip = auxVerticeOri->getTipoClima();
         dif = auxVerticeOri->getDificultad();
@@ -512,13 +543,59 @@ void Menu::crearPersonaje(const int &pos) {
     grafoPersonaje.borrarTodo();
 
     //Guarda el personaje en archivo binario
-    guardarPersonaje("Archivo_Personajes.bin", pers);
+    guardarPersonaje("Archivo_Personajes.bin", pers, pos);
 }
+
+void Menu::eliminarLogico(const int& pos) {
+    system(CLEAR);
+    string nomPersonaje;
+    cout << "*** Eliminar personaje (Lógico) ***" << endl << endl;
+    cout << "Ingrese el nombre del personaje a eliminar: ";
+    getline(cin, nomPersonaje);
+    int posIndice = listaCuentas[pos].getPosIndice();
+    if(existePersonajeCuenta(nomPersonaje, posIndice)){
+        listaCuentas[pos].setPosIndice(listaInvertida.eliminarLogico(posIndice, nomPersonaje));
+        cout << endl << "¡Eliminación exitosa!";
+    }
+    else{
+        cout << endl << "No existe el personaje en la cuenta.";
+    }
+}
+
+
+void Menu::activarLogico(const int& pos) {
+    system(CLEAR);
+    string nomPersonaje;
+    cout << "*** Activación de personaje (Lógico) ***" << endl << endl;
+    cout << "Ingrese el nombre del personaje a activar: ";
+    getline(cin, nomPersonaje);
+    int posIndice = listaCuentas[pos].getPosIndice();
+    if(existePersonaje(nomPersonaje)){
+        if(existePersonajeCuenta(nomPersonaje, posIndice)){
+            cout << "El personaje se encuentra activo.";
+        }
+        else{
+            string username = listaCuentas[pos].getUserName();
+            if(listaInvertida.cuentaPersonajeLineal(nomPersonaje, username)){
+                listaCuentas[pos].setPosIndice(listaInvertida.activacionLogica(nomPersonaje, username, posIndice));
+                cout << endl << "¡Activación exitosa!";
+            }
+            else{
+                cout << endl << "El personaje no pertenece a esta cuenta.";
+            }
+        }
+    }
+    else{
+        cout << endl << "No existe el nombre de personaje.";
+    }
+}
+
 
 void Menu::eliminarPersonaje(const int &pos) {
     system(CLEAR);
-    string auxStr;
-    string auxUser = listaCuentas[pos].getUserName();
+    cout << "*** Eliminar personaje (Física) ***" << endl << endl;
+    cout << "Esta opcion se encuentra en mantenimiento";
+    /*string auxUser = listaCuentas[pos].getUserName();
     cout << "*** Eliminar personaje ***" << endl << endl;
     cout << "Ingrese el nombre del personaje a eliminar: ";
     getline(cin, auxStr);
@@ -539,19 +616,21 @@ void Menu::eliminarPersonaje(const int &pos) {
                     }
                     string auxNom = pers.getNombre();
                     if(auxNom != auxStr) {
-                        guardarPersonaje("Temporal.bin", pers);
+                        guardarPersonaje("Temporal.bin", pers, pos);
                     }
                 }
             }
             file.close();
             remove("Archivo_Personajes.bin");
             rename("Temporal.bin", "Archivo_Personajes.bin");
+            string rmdir = "rm -rf Personajes/" + auxStr;
+            system(rmdir.c_str());
         } else {
             cout << endl << "Personaje conservado!" << endl;
         }
     } else {
         cout << endl << "No existe el personaje que desea eliminar. Intente de nuevo." << endl;
-    }
+    }*/
 }
 
 void Menu::accederPersonaje(const int &pos) {
@@ -568,8 +647,9 @@ void Menu::accederPersonaje(const int &pos) {
     file.close();
     cout << "Ingrese el nombre del personaje a acceder: ";
     getline(cin, auxStr);
-    if(existePersonajeCuenta(auxStr, auxUser)) {
-        Personaje personaje = regresaPersonaje(auxStr, auxUser);
+    int posIndice = listaCuentas[pos].getPosIndice();
+    if(existePersonajeCuenta(auxStr, posIndice)) {
+        Personaje personaje = regresaPersonaje(auxStr, posIndice);
         new MenuPersonajes(personaje, grafoGeneral);
     } else {
         cout << endl << "No existe el personaje al que desea acceder. Intente de nuevo." << endl;
@@ -618,60 +698,49 @@ bool Menu::passwdValido(std::string &password) {
 
 
 bool Menu::existePersonaje(std::string& nomPersonaje) {
-    ifstream file("Archivo_Personajes.bin");
-    Personaje pers;
-    if(file.good()) {
-        while(!file.eof()) {
-            file.read((char*)&pers, sizeof(pers));
-            if(file.eof()) {
-                break;
-            }
-            string auxNom = pers.getNombre();
-            if(auxNom == nomPersonaje) {
-                file.close();
-                return true;
-            }
-        }
-    }
-    file.close();
-    return false;
+    return listaInvertida.existePersonaje(nomPersonaje);
 }
 
-bool Menu::existePersonajeCuenta(std::string& nomPersonaje, std::string& username) {
-    ifstream file("Archivo_Personajes.bin");
-    Personaje pers;
-    if(file.good()) {
-        while(!file.eof()) {
-            file.read((char*)&pers, sizeof(pers));
-            if(file.eof()) {
-                break;
-            }
-            string auxNom = pers.getNombre();
-            string auxUser = pers.getUsernameOwner();
-            if(auxNom == nomPersonaje and auxUser == username) {
-                file.close();
-                return true;
-            }
-        }
+bool Menu::existePersonajeCuenta(std::string& nomPersonaje, const int &posIndice) {
+    if(posIndice == -1){
+        return false;
     }
-    file.close();
+    NodoInvertida* aux = listaInvertida[posIndice];
+    while(aux != nullptr) {
+        if(string(aux->getDato().getNombrePersonaje()) == nomPersonaje){
+            return true;
+        }
+        aux = aux->getSigPers();
+    }
     return false;
 }
 
 
 bool Menu::validoOpcMod(std::string& opc) {
-    regex rx("[0-7]");
+    regex rx("[0-9]");
     if(regex_match(opc, rx) and opc.length() > 0) {
         return true;
     }
     return false;
 }
 
-void Menu::guardarPersonaje(const std::string& archivo, Personaje pers) {
+void Menu::guardarPersonaje(const std::string& archivo, Personaje pers, const int &pos) {
     ofstream file(archivo, ios::binary|ios::app);
     file.write((char*)&pers, sizeof(pers));
+    long int posArchivo = file.tellp();
     file.close();
+
+    posArchivo -= sizeof(Personaje);
+    DatosInvertida datos;
+    datos.setNombrePersonaje(string(pers.getNombre()));
+    datos.setUsernameOwner(string(pers.getUsernameOwner()));
+    datos.setPosArchivo(posArchivo);
+
+    int posIndice = listaCuentas[pos].getPosIndice();
+
+    listaCuentas[pos].setPosIndice(listaInvertida.inserta(datos, listaInvertida.ultimaPos(), posIndice));
 }
+
 
 bool Menu::validoDato(std::string& dato) {
     regex rx("[a-zA-Z]*");
@@ -681,22 +750,19 @@ bool Menu::validoDato(std::string& dato) {
     return false;
 }
 
-Personaje Menu::regresaPersonaje(std::string& nomPersonaje, std::string &username) {
-    ifstream file("Archivo_Personajes.bin");
+Personaje Menu::regresaPersonaje(std::string& nomPersonaje, const int &posIndice) {
     Personaje pers;
-    if(file.good()) {
-        while(!file.eof()) {
-            file.read((char*)&pers, sizeof(pers));
-            if(file.eof()) {
-                break;
-            }
-            string auxNom = pers.getNombre();
-            string auxUserOwner = pers.getUsernameOwner();
-            if(auxNom == nomPersonaje and auxUserOwner == username) {
-                file.close();
-                return pers;
-            }
+    ifstream file("Archivo_Personajes.bin");
+    NodoInvertida* aux = listaInvertida[posIndice];
+    while(aux != nullptr) {
+        if(string(aux->getDato().getNombrePersonaje()) == nomPersonaje){
+            long int posArchivo = aux->getDato().getPosArchivo();
+            file.seekg(posArchivo, ios::beg);
+            file.read((char*)&pers, sizeof(Personaje));
+            file.close();
+            return pers;
         }
+        aux = aux->getSigPers();
     }
     file.close();
     return pers;
@@ -712,25 +778,23 @@ bool Menu::validoOpcRazaRol(std::string& opc) {
 }
 
 
-bool Menu::maxPersonajes(std::string& username) {
-    ifstream file("Archivo_Personajes.bin");
-    Personaje pers;
+bool Menu::maxPersonajes(std::string& username, const int &pos) {
+    int maximo = listaCuentas[pos].getMaxPersonajes();
+    int posIndice = listaCuentas[pos].getPosIndice();
+    NodoInvertida* aux = listaInvertida[posIndice];
     int i = 0;
-    if(file.good()) {
-        while(!file.eof()) {
-            file.read((char*)&pers, sizeof(pers));
-            if(file.eof()) {
-                break;
-            }
-            string auxPers = pers.getUsernameOwner();
-            if(auxPers == username) {
-                i++;
-            }
-        }
+    while(aux != nullptr) {
+        i++;
+        aux = aux->getSigPers();
     }
-    file.close();
-    if(i == 3) {
+    if(i == maximo){
         return true;
     }
     return false;
+}
+
+void Menu::mostrarListaInvertida() {
+    system(CLEAR);
+    cout << "*** Lista invertida *** " << endl << endl;
+    cout << listaInvertida.toString();
 }

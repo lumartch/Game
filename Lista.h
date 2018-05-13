@@ -2,6 +2,7 @@
 #define LISTA_H
 
 #include "Cuenta.h"
+#include <iostream>
 #include <fstream>
 
 class Nodo {

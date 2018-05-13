@@ -80,15 +80,18 @@ void Lista::guardarEnDisco() {
 }
 
 int Lista::busqueda(std::string &username) {
-    int i;
-    Nodo* aux(primero);
-    for(i = 0; i < getCont(); i++) {
+    //for(i = 0; i < cont; i++) {
+    int i = 0;
+    Nodo* aux = primero;
+     while(aux != nullptr){
         if(aux->getDato().getUserName() == username) {
             return i;
         }
+        i++;
         aux = aux->getSig();
-    }
+     }
     return -1;
+    //}
 }
 
 void Lista::eliminarDato(std::string &username) {
@@ -96,23 +99,41 @@ void Lista::eliminarDato(std::string &username) {
     if(estaVacia() or pos == -1){
         return;
     }
-    Nodo* aux(primero);
+    std::cout << pos << std::endl;
+    Nodo* aux = primero;
     if(pos == 0){
         primero = primero->getSig();
     }
     else{
         int i = 0;
         Nodo* ant;
-        while(i != pos - 1){
+        while(i < pos - 1 ){
             aux = aux->getSig();
+            std::cout << i << std::endl;
             i++;
         }
         ant = aux;
         aux = aux->getSig();
-        ant->setSig(aux->getSig());
+        if(aux->getSig() == nullptr){
+            std::cout << "Es el ultimo elemento" << std::endl;
+            std::cout << aux->getDato().toString() << std::endl;
+            std::cout << ant->getDato().toString() << std::endl;
+            ant->setSig(nullptr);
+        }
+        else{
+            std::cout << "Es un elemento en medio" << std::endl;
+            std::cout << aux->getDato().toString() << std::endl;
+            std::cout << ant->getDato().toString()<< std::endl;
+            ant->setSig(aux->getSig());
+
+
+        }
+        /*ant = aux;
+        ant->setSig(aux->getSig());*/
     }
     cont--;
     delete aux;
+
 }
 
 int Lista::getCont() {

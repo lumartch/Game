@@ -10,6 +10,7 @@ MenuPersonajes::MenuPersonajes(Personaje& pers, Grafo & graf) {
     string nombre = personaje.getNombre();
     mkVertices = DIR + nombre + SLASH + nombre + "_Vertices.txt";
     mkAristas = DIR + nombre + SLASH + nombre + "_Aristas.txt";
+
     //Lee del directorio el inventario
     listaInventario.leerDelDisco(DIR + nombre + SLASH + nombre + "_Inventario.txt");
 

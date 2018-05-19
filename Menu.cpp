@@ -567,6 +567,11 @@ void Menu::activarLogico(const int& pos) {
     system(CLEAR);
     string nomPersonaje;
     cout << "*** Activación de personaje (Lógico) ***" << endl << endl;
+    string usnm = listaCuentas[pos].getUserName();
+    if(maxPersonajes(usnm, pos)) {
+        cout << endl << "Cuenta con el máximo de personajes, imposible hacer activación lógica." << endl;
+        return;
+    }
     cout << "Ingrese el nombre del personaje a activar: ";
     getline(cin, nomPersonaje);
     int posIndice = listaCuentas[pos].getPosIndice();
@@ -783,6 +788,11 @@ bool Menu::validoOpcRazaRol(std::string& opc) {
 bool Menu::maxPersonajes(std::string& username, const int &pos) {
     int maximo = listaCuentas[pos].getMaxPersonajes();
     int posIndice = listaCuentas[pos].getPosIndice();
+
+    if(posIndice == -1){
+        return false;
+    }
+
     NodoInvertida* aux = listaInvertida[posIndice];
     int i = 0;
     while(aux != nullptr) {

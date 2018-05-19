@@ -1,0 +1,99 @@
+# depslib dependency file v1.0
+1526710750 source:/home/lumartch/Game/Arma.cpp
+	"Arma.h"
+
+1526710750 /home/lumartch/Game/Arma.h
+	<string>
+	<cstring>
+
+1526710750 source:/home/lumartch/Game/Cuenta.cpp
+	"Cuenta.h"
+
+1526710750 /home/lumartch/Game/Cuenta.h
+	<string>
+	"Personaje.h"
+
+1526710750 /home/lumartch/Game/Personaje.h
+	"Arma.h"
+	<cstring>
+	<string>
+
+1526710750 source:/home/lumartch/Game/Grafo.cpp
+	"Grafo.h"
+
+1526710750 /home/lumartch/Game/Grafo.h
+	"Arma.h"
+	<iostream>
+	<string>
+	<cstring>
+	<fstream>
+
+1526710750 source:/home/lumartch/Game/Historial.cpp
+	"Historial.h"
+
+1526710750 /home/lumartch/Game/Historial.h
+	<string>
+	<cstring>
+
+1526710750 source:/home/lumartch/Game/Lista.cpp
+	"Lista.h"
+
+1526710750 /home/lumartch/Game/Lista.h
+	"Cuenta.h"
+	<iostream>
+	<fstream>
+
+1526710750 source:/home/lumartch/Game/ListaHistorial.cpp
+	"ListaHistorial.h"
+
+1526710750 /home/lumartch/Game/ListaHistorial.h
+	"Historial.h"
+
+1526710750 source:/home/lumartch/Game/ListaInventario.cpp
+	"ListaInventario.h"
+
+1526710750 /home/lumartch/Game/ListaInventario.h
+	<fstream>
+	<iostream>
+	"Arma.h"
+
+1526710750 source:/home/lumartch/Game/listainvertida.cpp
+	"listainvertida.h"
+
+1526710750 /home/lumartch/Game/listainvertida.h
+	<string>
+	<cstring>
+	<fstream>
+	<iostream>
+
+1526710750 source:/home/lumartch/Game/main.cpp
+	<iostream>
+	"Menu.h"
+
+1526710750 /home/lumartch/Game/Menu.h
+	"Lista.h"
+	"Cuenta.h"
+	"Personaje.h"
+	"MenuPersonajes.h"
+	"listainvertida.h"
+
+1526710750 /home/lumartch/Game/MenuPersonajes.h
+	"ListaHistorial.h"
+	"ListaInventario.h"
+	"Personaje.h"
+	"Historial.h"
+	"Grafo.h"
+	<iostream>
+	<regex>
+	<fstream>
+	<iomanip>
+
+1526712295 source:/home/lumartch/Game/Menu.cpp
+	"Menu.h"
+
+1526711039 source:/home/lumartch/Game/MenuPersonajes.cpp
+	"MenuPersonajes.h"
+
+1526710750 source:/home/lumartch/Game/Personaje.cpp
+	"Personaje.h"
+

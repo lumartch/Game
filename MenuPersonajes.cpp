@@ -8,14 +8,14 @@ MenuPersonajes::MenuPersonajes(Personaje& pers, Grafo & graf) {
     this->personaje = pers;
     this->grafoGeneral = graf;
     string nombre = this->personaje.getNombre();
-    this->mkVertices = DIR + nombre + SLASH + nombre + "_Vertices.txt";
-    this->mkAristas = DIR + nombre + SLASH + nombre + "_Aristas.txt";
+    this->mkVertices = string(DIR) + nombre + string(SLASH) + nombre + "_Vertices.txt";
+    this->mkAristas = string(DIR) + nombre + string(SLASH) + nombre + "_Aristas.txt";
 
     //Lee del directorio el inventario
-    this->listaInventario.leerDelDisco(DIR + nombre + SLASH + nombre + "_Inventario.txt");
+    this->listaInventario.leerDelDisco(string(DIR) + nombre + string(SLASH) + nombre + "_Inventario.txt");
 
     //Lee el grafo del Personaje
-    this->grafoPersonaje.cargar(mkVertices, mkAristas);
+    this->grafoPersonaje.cargar(this->mkVertices, this->mkAristas);
     menuPrincipal();
 }
 
@@ -291,9 +291,6 @@ void MenuPersonajes::abandonar() {
     rename("Temporal.bin", "Archivo_Personajes.bin");
 
     //Guarda el grafo
-
-    string nombre = this->personaje.getNombre();
-
     remove(this->mkVertices.c_str());
     remove(this->mkAristas.c_str());
     this->grafoPersonaje.guardar(this->mkVertices, this->mkAristas);

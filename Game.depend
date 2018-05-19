@@ -35,7 +35,7 @@
 	<string>
 	<cstring>
 
-1526710750 source:/home/lumartch/Game/Lista.cpp
+1526769665 source:/home/lumartch/Game/Lista.cpp
 	"Lista.h"
 
 1526710750 /home/lumartch/Game/Lista.h
@@ -88,7 +88,7 @@
 	<fstream>
 	<iomanip>
 
-1526712295 source:/home/lumartch/Game/Menu.cpp
+1526765053 source:/home/lumartch/Game/Menu.cpp
 	"Menu.h"
 
 1526711039 source:/home/lumartch/Game/MenuPersonajes.cpp

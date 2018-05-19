@@ -80,7 +80,6 @@ void Lista::guardarEnDisco() {
 }
 
 int Lista::busqueda(std::string &username) {
-    //for(i = 0; i < cont; i++) {
     int i = 0;
     Nodo* aux = primero;
      while(aux != nullptr){
@@ -91,7 +90,6 @@ int Lista::busqueda(std::string &username) {
         aux = aux->getSig();
      }
     return -1;
-    //}
 }
 
 void Lista::eliminarDato(std::string &username) {
@@ -145,11 +143,11 @@ void Lista::cargarDesdeDisco(std::string nombreArchivo) {
         return;
     }
     std::string stringObj;
-    fin >> stringObj;
+    getline(fin,stringObj);
     while (!fin.eof()) {
         Cuenta obj(stringObj);
         inserta(obj);
-        fin >> stringObj;
+        getline(fin,stringObj);
     }
     fin.close();
 }

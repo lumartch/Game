@@ -145,6 +145,7 @@ void Menu::agregar() {
         }
     } while(!correoValido(auxStr));
     auxCuenta.setCorreo(auxStr);
+
     do {
         cout << "Ingrese su contraseña: ";
         getline(cin, auxStr);
@@ -155,6 +156,7 @@ void Menu::agregar() {
         }
     } while(auxStr != auxPass);
     auxCuenta.setPasswd(auxStr);
+
     listaCuentas.inserta(auxCuenta);
 }
 

@@ -99,7 +99,6 @@ void Lista::eliminarDato(std::string &username) {
     if(estaVacia() or pos == -1){
         return;
     }
-    std::cout << pos << std::endl;
     Nodo* aux = primero;
     if(pos == 0){
         primero = primero->getSig();
@@ -109,24 +108,15 @@ void Lista::eliminarDato(std::string &username) {
         Nodo* ant;
         while(i < pos - 1 ){
             aux = aux->getSig();
-            std::cout << i << std::endl;
             i++;
         }
         ant = aux;
         aux = aux->getSig();
         if(aux->getSig() == nullptr){
-            std::cout << "Es el ultimo elemento" << std::endl;
-            std::cout << aux->getDato().toString() << std::endl;
-            std::cout << ant->getDato().toString() << std::endl;
             ant->setSig(nullptr);
         }
         else{
-            std::cout << "Es un elemento en medio" << std::endl;
-            std::cout << aux->getDato().toString() << std::endl;
-            std::cout << ant->getDato().toString()<< std::endl;
             ant->setSig(aux->getSig());
-
-
         }
         /*ant = aux;
         ant->setSig(aux->getSig());*/
@@ -163,3 +153,12 @@ void Lista::cargarDesdeDisco(std::string nombreArchivo) {
     }
     fin.close();
 }
+
+void Lista::eliminarIndice() {
+    Nodo* aux = primero;
+    while(aux != nullptr){
+        aux->getDato().setPosIndice(-1);
+        aux = aux->getSig();
+     }
+}
+

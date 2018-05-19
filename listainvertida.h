@@ -69,6 +69,8 @@ public:
     void guardarEnDisco();
     void cargarDesdeDisco();
     int getCont();
+    int buscar(const std::string& nomPersonaje);
+    void eliminarNodo(const std::string& nomPersonaje);
     bool existePersonaje(std::string &nomPersonaje);
     std::string toString();
     std::string personajesJugador(const int &pos);

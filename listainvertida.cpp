@@ -53,7 +53,7 @@ long int DatosInvertida::getPosArchivo() {
 std::string DatosInvertida::toString() {
     std::string res;
     res += std::to_string(actual) + "|" +std::string(usernameOwner) + "|" + std::string(nombrePersonaje) + "|" + std::to_string(siguiente)
-    + "|PosArchivo: " +std::to_string(posArchivo) + "|Activo: "+std::to_string(activo) +"\n";
+           + "|PosArchivo: " +std::to_string(posArchivo) + "|Activo: "+std::to_string(activo) +"\n";
     return res;
 }
 
@@ -114,7 +114,7 @@ ListaInvertida::~ListaInvertida() {
 }
 
 NodoInvertida* ListaInvertida::ultimaPos() {
-    if(primero == nullptr){
+    if(primero == nullptr) {
         return nullptr;
     }
 
@@ -136,10 +136,9 @@ int ListaInvertida::inserta(DatosInvertida datos, NodoInvertida* pos, int& posIn
         pos->setSig(aux);
     }
 
-    if(posIndice == -1){
+    if(posIndice == -1) {
         posIndice = cont;
-    }
-    else{
+    } else {
         NodoInvertida* newSigInv = primero;
         int i = 0;
         while(i < posIndice) {
@@ -147,7 +146,7 @@ int ListaInvertida::inserta(DatosInvertida datos, NodoInvertida* pos, int& posIn
             i++;
         }
 
-        while(newSigInv->getSigPers() != nullptr){
+        while(newSigInv->getSigPers() != nullptr) {
 
             newSigInv = newSigInv->getSigPers();
         }
@@ -172,26 +171,24 @@ int ListaInvertida::eliminarLogico(const int& posIndice, std::string& nomPersona
         i++;
     };
     NodoInvertida* anterior;
-    while(actual != nullptr){
-        if(std::string(actual->getDato().getNombrePersonaje()) == nomPersonaje){
+    while(actual != nullptr) {
+        if(std::string(actual->getDato().getNombrePersonaje()) == nomPersonaje) {
             break;
         }
         anterior = actual;
         actual = actual->getSigPers();
     }
 
-    if(actual->getDato().getActual() == posIndice){
+    if(actual->getDato().getActual() == posIndice) {
         posNueva = actual->getDato().getSiguiente();
-        if(actual->getSigPers() != nullptr){
+        if(actual->getSigPers() != nullptr) {
             actual->setSigPers(nullptr);
         }
-    }
-    else{
-        if(actual->getSigPers() != nullptr){
+    } else {
+        if(actual->getSigPers() != nullptr) {
             anterior->setSigPers(actual->getSigPers());
             anterior->getDato().setSiguiente(actual->getDato().getSiguiente());
-        }
-        else{
+        } else {
             anterior->setSigPers(nullptr);
             anterior->getDato().setSiguiente(-1);
         }
@@ -210,7 +207,7 @@ void ListaInvertida::eliminacionPersonajesLogica(const int& posIndice) {
     };
 
     NodoInvertida* aux;
-    while(actual != nullptr){
+    while(actual != nullptr) {
         aux = actual;
         actual = actual->getSigPers();
 
@@ -222,8 +219,8 @@ void ListaInvertida::eliminacionPersonajesLogica(const int& posIndice) {
 
 bool ListaInvertida::cuentaPersonajeLineal(std::string& nomPersonaje, std::string& username) {
     NodoInvertida* aux = primero;
-    while(aux != nullptr){
-        if(std::string(aux->getDato().getUsernameOwner()) == username and std::string(aux->getDato().getNombrePersonaje()) == nomPersonaje){
+    while(aux != nullptr) {
+        if(std::string(aux->getDato().getUsernameOwner()) == username and std::string(aux->getDato().getNombrePersonaje()) == nomPersonaje) {
             return true;
         }
         aux = aux->getSig();
@@ -236,28 +233,27 @@ int ListaInvertida::activacionLogica(std::string& nomPersonaje, std::string &use
     int posNueva = posIndice;
 
     NodoInvertida* actualizar = primero;
-    while(actualizar != nullptr){
-        if(std::string(actualizar->getDato().getUsernameOwner()) == username and std::string(actualizar->getDato().getNombrePersonaje()) == nomPersonaje){
+    while(actualizar != nullptr) {
+        if(std::string(actualizar->getDato().getUsernameOwner()) == username and std::string(actualizar->getDato().getNombrePersonaje()) == nomPersonaje) {
             break;
         }
         actualizar = actualizar->getSig();
     }
 
     NodoInvertida* aux = primero;
-    while(i < posIndice){
+    while(i < posIndice) {
         aux = aux->getSig();
         i++;
     }
-    while(aux->getSigPers() != nullptr){
+    while(aux->getSigPers() != nullptr) {
         aux = aux->getSigPers();
     }
 
 
-    if(posIndice == -1){
+    if(posIndice == -1) {
         posNueva = actualizar->getDato().getActual();
 
-    }
-    else{
+    } else {
         aux->setSigPers(actualizar);
         aux->getDato().setSiguiente(actualizar->getDato().getActual());
 
@@ -309,12 +305,12 @@ void ListaInvertida::insertaCargado(DatosInvertida datos, NodoInvertida* pos) {
 
 void ListaInvertida::organizaNodos() {
     NodoInvertida* aux = primero;
-    while(aux != nullptr){
+    while(aux != nullptr) {
         int sig = aux->getDato().getSiguiente();
-        if(sig != -1){
+        if(sig != -1) {
             int i = 0;
             NodoInvertida* auxSigPers = primero;
-            while(i < sig){
+            while(i < sig) {
                 auxSigPers = auxSigPers->getSig();
                 i++;
             }
@@ -326,17 +322,18 @@ void ListaInvertida::organizaNodos() {
 
 void ListaInvertida::cargarDesdeDisco() {
     std::ifstream file(ARCHIVO);
-    if(!file.good()){
+    if(!file.good()) {
         file.close();
         std::ofstream fileIn(ARCHIVO, std::ios::app);
         fileIn.close();
         return;
-    }
-    else{
+    } else {
         DatosInvertida datos;
-        while(!file.eof()){
+        while(!file.eof()) {
             file.read((char*)&datos, sizeof(DatosInvertida));
-            if(file.eof()){break;}
+            if(file.eof()) {
+                break;
+            }
             insertaCargado(datos, ultimaPos());
         }
     }
@@ -365,7 +362,7 @@ void ListaInvertida::eliminarTodo() {
 }
 
 
-std::string ListaInvertida::personajesJugador(const int& posIndice){
+std::string ListaInvertida::personajesJugador(const int& posIndice) {
     NodoInvertida* aux = primero;
     int i = 0;
     while(i < posIndice) {
@@ -374,7 +371,7 @@ std::string ListaInvertida::personajesJugador(const int& posIndice){
     }
 
     std::string res;
-    while(aux->getDato().getSiguiente() != -1){
+    while(aux->getDato().getSiguiente() != -1) {
         res += aux->getDato().toString();
         aux = aux->getSigPers();
     }
@@ -384,11 +381,53 @@ std::string ListaInvertida::personajesJugador(const int& posIndice){
 
 bool ListaInvertida::existePersonaje(std::string& nomPersonaje) {
     NodoInvertida* aux = primero;
-    while(aux != nullptr){
-        if(std::string(aux->getDato().getNombrePersonaje()) == nomPersonaje){
+    while(aux != nullptr) {
+        if(std::string(aux->getDato().getNombrePersonaje()) == nomPersonaje) {
             return true;
         }
         aux = aux->getSig();
     }
     return false;
+}
+
+int ListaInvertida::buscar(const std::string& nomPersonaje) {
+    int i = 0;
+    NodoInvertida* aux = primero;
+     while(aux != nullptr){
+        if(std::string(aux->getDato().getNombrePersonaje()) == nomPersonaje) {
+            return i;
+        }
+        i++;
+        aux = aux->getSig();
+     }
+    return -1;
+}
+
+void ListaInvertida::eliminarNodo(const std::string& nomPersonaje) {
+    int pos = buscar(nomPersonaje);
+    if(estaVacia() or pos == -1) {
+        return;
+    }
+    NodoInvertida* aux = primero;
+    if(pos == 0) {
+        primero = primero->getSig();
+    } else {
+        int i = 0;
+        NodoInvertida* ant;
+        while(i < pos - 1 ) {
+            aux = aux->getSig();
+            i++;
+        }
+        ant = aux;
+        aux = aux->getSig();
+        if(aux->getSig() == nullptr) {
+            ant->setSig(nullptr);
+        } else {
+            ant->setSig(aux->getSig());
+        }
+        /*ant = aux;
+        ant->setSig(aux->getSig());*/
+    }
+    cont--;
+    delete aux;
 }

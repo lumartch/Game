@@ -32,6 +32,7 @@ public:
     int getCont();
     void cargarDesdeDisco(std::string nombreArchivo);
     Cuenta& operator[](const int &pos);
+    void eliminarIndice();
 
 private:
     Nodo* primero;

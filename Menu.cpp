@@ -96,7 +96,7 @@ void Menu::acceder() {
         } else if(opc == "4") {
             crearPersonaje(pos);
         } else if(opc == "5") {
-            //eliminarPersonaje(pos);
+            eliminarPersonaje(pos);
         } else if(opc == "6") {
             eliminarLogico(pos);
         } else if(opc == "7") {
@@ -593,29 +593,31 @@ void Menu::activarLogico(const int& pos) {
 
 void Menu::eliminarPersonaje(const int &pos) {
     system(CLEAR);
+    string nomPersonaje;
     cout << "*** Eliminar personaje (Física) ***" << endl << endl;
-    cout << "Esta opcion se encuentra en mantenimiento";
-    /*string auxUser = listaCuentas[pos].getUserName();
-    cout << "*** Eliminar personaje ***" << endl << endl;
+    //cout << "Esta opcion se encuentra en mantenimiento";
+    //string auxUser = listaCuentas[pos].getUserName();
+    //cout << "*** Eliminar personaje ***" << endl << endl;
     cout << "Ingrese el nombre del personaje a eliminar: ";
-    getline(cin, auxStr);
-    if(existePersonajeCuenta(auxStr, auxUser)) {
+    getline(cin, nomPersonaje);
+    int posIndice = listaCuentas[pos].getPosIndice();
+    if(existePersonajeCuenta(nomPersonaje, posIndice)) {
         string opc;
         do {
             cout << endl << "Seguro que desea eliminar a este personaje? (S/N): ";
             getline(cin, opc);
         } while(opc != "S" and opc != "s" and opc != "N" and opc != "n");
         if(opc == "S" or opc == "s") {
+            listaCuentas.eliminarIndice();
+            listaInvertida.eliminarTodo();
             ifstream file("Archivo_Personajes.bin");
             if(file.good()) {
                 Personaje pers;
                 while(!file.eof()) {
                     file.read((char*)&pers, sizeof(pers));
-                    if(file.eof()) {
-                        break;
-                    }
+                    if(file.eof()) { break; }
                     string auxNom = pers.getNombre();
-                    if(auxNom != auxStr) {
+                    if(auxNom != nomPersonaje) {
                         guardarPersonaje("Temporal.bin", pers, pos);
                     }
                 }
@@ -623,14 +625,14 @@ void Menu::eliminarPersonaje(const int &pos) {
             file.close();
             remove("Archivo_Personajes.bin");
             rename("Temporal.bin", "Archivo_Personajes.bin");
-            string rmdir = "rm -rf Personajes/" + auxStr;
+            string rmdir = "rm -rf Personajes/" + nomPersonaje;
             system(rmdir.c_str());
         } else {
             cout << endl << "Personaje conservado!" << endl;
         }
     } else {
         cout << endl << "No existe el personaje que desea eliminar. Intente de nuevo." << endl;
-    }*/
+    }
 }
 
 void Menu::accederPersonaje(const int &pos) {
